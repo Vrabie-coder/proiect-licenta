@@ -46,6 +46,25 @@
 </footer>
 
 <script src="js/cart.js"></script>
+
+<div id="custom-alert-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <p id="alert-message"></p>
+        <button class="btn-primary" id="alert-ok-button">OK</button>
+    </div>
+</div>
+<div id="order-prompt-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" id="order-prompt-close">&times;</span>
+        <p>Introduceți numele dumneavoastră pentru comandă:</p>
+        <input type="text" id="customer-name-input" placeholder="Nume complet" required>
+        <button class="btn-primary" id="order-prompt-submit">Plasează Comanda</button>
+        <button class="btn-secondary" id="order-prompt-cancel">Anulează</button>
+        <p id="order-prompt-error" class="error-message"></p>
+    </div>
+</div>
+
 </body>
 
 </html>

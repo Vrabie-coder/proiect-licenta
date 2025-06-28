@@ -91,6 +91,45 @@ main {
     min-height: 60vh; /* Asigură că main ocupă suficient spațiu */
 }
 
+/* --- Stiluri de bază pentru butoane (Mutate aici pentru consistență) --- */
+.btn-primary {
+    background-color: #f7b731; /* Culoarea primară (galben-portocaliu) */
+    color: white;
+    padding: 12px 25px;
+    border: none; /* Crucial pentru a elimina bordura implicită */
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none; /* În cazul în care este folosit pe <a> */
+    display: inline-block; /* Pentru padding și margin corecte */
+    font-weight: bold; /* Adăugat pentru a se potrivi cu butonul original de pe home */
+}
+
+.btn-primary:hover {
+    background-color: #e6a720; /* O nuanță puțin mai închisă la hover */
+}
+
+.btn-secondary {
+    background-color: #6c757d; /* Culoare gri, pentru acțiuni secundare */
+    color: white;
+    padding: 12px 25px;
+    border: none; /* Crucial pentru a elimina bordura implicită */
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: bold; /* Adăugat pentru consistență */
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+/* ------------------------------------------------------------------ */
+
+
 /* Stiluri pentru Hero Section (Acasă) */
 .hero-section {
     text-align: center;
@@ -120,20 +159,8 @@ main {
     margin-bottom: 25px;
 }
 
-.btn-primary {
-    display: inline-block;
-    background-color: #d48e00;
-    color: white;
-    padding: 12px 25px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
+/* Vechea definiție a .btn-primary a fost MUTATĂ și ȘTEARSĂ de aici */
 
-.btn-primary:hover {
-    background-color: #f0a000;
-}
 
 /* Stiluri pentru Features Section (Acasă) */
 .features-section {
@@ -206,6 +233,11 @@ main {
     margin-bottom: 15px;
 }
 
+/* Acest stil se aplică butoanelor din cardurile de produs.
+   Dacă vrei ca aceste butoane să fie identice cu .btn-primary,
+   atunci șterge acest bloc și adaugă class="btn-primary" în HTML-ul lor.
+   Am lăsat așa cum era pentru că ai fost mulțumit de aspectul lor inițial.
+*/
 .product-card button {
     background-color: #f0a000;
     color: white;
@@ -341,4 +373,117 @@ footer {
         margin: 5px 0;
     }
     */
+}
+
+/* Stiluri pentru Pop-up-uri (Modale) */
+.modal {
+    display: none; /* Ascuns implicit la încărcarea paginii */
+    position: fixed; /* Rămâne fix pe ecran chiar dacă utilizatorul derulează */
+    z-index: 1000; /* Asigură că este deasupra tuturor celorlalte elemente de pe pagină */
+    left: 0;
+    top: 0;
+    width: 100%; /* Acoperă toată lățimea ferestrei browserului */
+    height: 100%; /* Acoperă toată înălțimea ferestrei browserului */
+    overflow: auto; /* Permite derularea conținutului modalei dacă este prea mare */
+    background-color: rgba(0,0,0,0.4); /* Fundal semi-transparent (negru cu transparență de 40%) */
+    backdrop-filter: blur(5px); /* Aplică un efect de blur pe fundalul din spatele modalei */
+    -webkit-backdrop-filter: blur(5px); /* Pentru compatibilitate cu browserul Safari */
+    justify-content: center; /* Centrează conținutul orizontal */
+    align-items: center; /* Centrează conținutul vertical */
+}
+
+/* Clasa care va fi adăugată dinamic cu JavaScript pentru a afișa modala */
+.modal.show {
+    display: flex; /* Schimbă display-ul la flex pentru a face modala vizibilă */
+}
+
+.modal-content {
+    background-color: white; /* Fundalul casetei pop-up */
+    margin: auto; /* Ajută la centrare (flexbox deja o face, dar e o bună practică) */
+    padding: 30px; /* Spațiere interioară */
+    border: 1px solid #888; /* Bordură subțire */
+    width: 90%; /* Lățime inițială a conținutului */
+    max-width: 450px; /* Lățime maximă pentru a nu fi prea lat pe desktop */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Umbră subtilă pentru un efect 3D */
+    border-radius: 10px; /* Colțuri rotunjite */
+    position: relative; /* Necesar pentru a poziționa butonul de închidere absolut */
+    text-align: center; /* Centrează textul din modală */
+    animation: fadeInScale 0.3s ease-out; /* Aplică animația de apariție */
+}
+
+.close-button {
+    color: #aaa; /* Culoarea inițială a "X"-ului */
+    float: right; /* Flotează la dreapta pentru a apărea în colț */
+    font-size: 28px; /* Mărimea fontului pentru "X" */
+    font-weight: bold; /* Face "X"-ul mai gros */
+    cursor: pointer; /* Schimbă cursorul la o mână pentru a indica că e clicabil */
+    position: absolute; /* Poziție absolută față de .modal-content */
+    top: 10px; /* 10px de sus */
+    right: 15px; /* 15px de dreapta */
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #333; /* Culoare mai închisă la hover/focus */
+    text-decoration: none; /* Asigură că nu are subliniere */
+}
+
+#alert-message {
+    font-size: 1.2em; /* Mărimea fontului pentru mesajul de alertă */
+    margin-bottom: 25px; /* Spațiu sub mesaj */
+    color: #333; /* Culoarea textului mesajului */
+    font-weight: 500; /* Greutatea fontului */
+}
+
+#alert-ok-button {
+    padding: 10px 30px; /* Padding pentru butonul "OK" */
+    font-size: 1em; /* Mărimea fontului */
+}
+
+/* Animație CSS pentru apariția modalei */
+@keyframes fadeInScale {
+    from { /* Starea inițială a animației */
+        opacity: 0; /* Complet transparent */
+        transform: scale(0.9); /* Micșorat la 90% din dimensiunea normală */
+    }
+    to { /* Starea finală a animației */
+        opacity: 1; /* Complet vizibil */
+        transform: scale(1); /* Dimensiunea normală */
+    }
+}
+
+/* Stiluri specifice pentru Modala de Comandă */
+#order-prompt-modal .modal-content {
+    max-width: 500px; /* Poate fi puțin mai lată decât alerta, pentru input */
+    padding: 35px;
+}
+
+#order-prompt-modal p {
+    font-size: 1.1em;
+    margin-bottom: 20px;
+}
+
+#customer-name-input {
+    width: calc(100% - 20px); /* Ocupă aproape toată lățimea, cu padding */
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+/* Butoanele din modala de comanda */
+#order-prompt-submit {
+    margin-right: 10px; /* Spațiu între butoane */
+}
+
+#order-prompt-cancel {
+    /* Nu mai este nevoie de reguli specifice aici, clasa btn-secondary ar trebui să fie suficientă */
+}
+
+
+#order-prompt-error {
+    margin-top: 15px;
+    color: #dc3545; /* Roșu pentru erori */
+    font-weight: bold;
 }

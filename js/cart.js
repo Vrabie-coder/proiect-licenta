@@ -23,6 +23,121 @@ function saveCart(cart) {
     localStorage.setItem('shoppingCart', JSON.stringify(cart));
 }
 
+// Funcție pentru a afișa un pop-up personalizat în loc de alert()
+function showAlert(message) {
+    const modal = document.getElementById('custom-alert-modal'); // Obține elementul modal principal
+    const alertMessageElement = document.getElementById('alert-message'); // Obține elementul unde va fi afișat mesajul
+    const closeButton = document.querySelector('.close-button'); // Obține butonul de închidere (X)
+    const okButton = document.getElementById('alert-ok-button'); // Obține butonul "OK"
+
+    // Ne asigurăm că toate elementele HTML necesare există înainte de a încerca să le manipulăm
+    if (modal && alertMessageElement && closeButton && okButton) {
+        alertMessageElement.textContent = message; // Setează textul mesajului în pop-up
+        modal.classList.add('show'); // Adaugă clasa 'show' la modal, făcându-l vizibil prin CSS
+
+        // Funcție internă pentru a închide modala
+        const closeModal = () => {
+            modal.classList.remove('show'); // Elimină clasa 'show', ascunzând modala
+            // **Foarte important:** Eliminăm event listener-ele pentru a preveni acumularea lor
+            closeButton.removeEventListener('click', closeModal);
+            okButton.removeEventListener('click', closeModal);
+            window.removeEventListener('click', clickOutsideModal); // Elimină și listener-ul pentru click în afara modalei
+        };
+
+        // Adaugă event listener-e pentru închiderea modalei la click pe "X" sau "OK"
+        closeButton.addEventListener('click', closeModal);
+        okButton.addEventListener('click', closeModal);
+
+        // Adaugă event listener pentru a închide modala dacă se dă click în afara conținutului ei
+        const clickOutsideModal = (event) => {
+            // Dacă elementul pe care s-a dat click este chiar containerul modal (adică fundalul întunecat)
+            if (event.target === modal) {
+                closeModal(); // Atunci închide modala
+            }
+        };
+        window.addEventListener('click', clickOutsideModal);
+    }
+}
+// js/cart.js (Continuare)
+
+// Funcție pentru a afișa modala de prompt pentru comandă
+function showOrderPrompt() {
+    const modal = document.getElementById('order-prompt-modal');
+    const customerNameInput = document.getElementById('customer-name-input');
+    const submitButton = document.getElementById('order-prompt-submit');
+    const cancelButton = document.getElementById('order-prompt-cancel');
+    const closeButton = document.getElementById('order-prompt-close');
+    const errorMessage = document.getElementById('order-prompt-error');
+
+    if (!modal || !customerNameInput || !submitButton || !cancelButton || !closeButton || !errorMessage) {
+        console.error('Elemente lipsă pentru modala de comandă!');
+        return; // Oprește execuția dacă elemente cruciale lipsesc
+    }
+
+    // Resetăm starea modalei
+    customerNameInput.value = ''; // Golește input-ul
+    errorMessage.textContent = ''; // Golește mesajele de eroare
+    modal.classList.add('show'); // Afișează modala
+
+    // Focus pe input pentru o experiență mai bună
+    setTimeout(() => customerNameInput.focus(), 100);
+
+
+    // Handler pentru submit (Plasează Comanda)
+    const handleSubmit = () => {
+        const customerName = customerNameInput.value.trim(); // Trim pentru a elimina spațiile goale de la început/sfârșit
+
+        if (customerName === '') {
+            errorMessage.textContent = 'Numele este obligatoriu!';
+            return;
+        }
+
+        // Dacă numele este valid, închidem modala și continuăm cu plasarea comenzii
+        closeOrderPrompt(); // Închide modala
+        simulateOrderPlacement(customerName); // Apelează funcția de plasare a comenzii cu numele obținut
+    };
+
+    // Handler pentru cancel (Anulează)
+    const handleCancel = () => {
+        closeOrderPrompt(); // Închide modala
+        showAlert("Comanda a fost anulată."); // Afișează alertă de anulare (noua modală de alertă)
+    };
+
+    // Funcție internă pentru a închide modala și a curăța listener-ele
+    const closeOrderPrompt = () => {
+        modal.classList.remove('show');
+        submitButton.removeEventListener('click', handleSubmit);
+        cancelButton.removeEventListener('click', handleCancel);
+        closeButton.removeEventListener('click', handleCancel); // X-ul face tot anulare
+        window.removeEventListener('click', clickOutsideOrderPrompt);
+        customerNameInput.removeEventListener('keypress', handleKeyPress);
+    };
+
+    // Adaugă listener-ele
+    submitButton.addEventListener('click', handleSubmit);
+    cancelButton.addEventListener('click', handleCancel);
+    closeButton.addEventListener('click', handleCancel); // "X" face la fel ca Anulează
+
+    // Închide modala dacă se apasă ESC
+    const handleKeyPress = (event) => {
+        if (event.key === 'Escape') {
+            handleCancel();
+        } else if (event.key === 'Enter') {
+            handleSubmit();
+        }
+    };
+    customerNameInput.addEventListener('keypress', handleKeyPress);
+
+
+    // Închide modala dacă se dă click în afara ei
+    const clickOutsideOrderPrompt = (event) => {
+        if (event.target === modal) {
+            handleCancel();
+        }
+    };
+    window.addEventListener('click', clickOutsideOrderPrompt);
+}
+
 // 3. Funcție pentru a adăuga un produs în coș
 function addToCart(productId, productName, productPrice) {
     let cart = getCart(); // Obține coșul curent (poate fi gol sau cu produse)
@@ -51,7 +166,7 @@ function addToCart(productId, productName, productPrice) {
     saveCart(cart); // Salvăm coșul actualizat în Local Storage
     updateCartDisplay(); // Apelăm funcția care actualizează vizual coșul (o vom scrie mai jos)
     updateCartItemCount(); // Apelăm funcția care actualizează contorul din header (o vom scrie mai jos)
-    alert(`${productName} a fost adăugat în coș!`); // Un mesaj rapid de confirmare pentru utilizator
+    showAlert(`${productName} a fost adăugat în coș!`); // Un mesaj rapid de confirmare pentru utilizator
 }
 
 // 4. Funcție pentru a elimina un produs complet din coș (sau a-i reduce cantitatea)
@@ -175,40 +290,30 @@ document.addEventListener('click', (event) => {
 });
 
 // 10. Funcția pentru simularea plasării comenzii
-function simulateOrderPlacement() {
+// Primește acum numele clientului ca parametru
+function simulateOrderPlacement(customerName) {
     const cart = getCart(); // Obține coșul curent
 
     if (cart.length === 0) { // Verifică dacă coșul este gol
-        alert("Coșul de cumpărături este gol! Adaugă produse înainte de a plasa o comandă.");
+        showAlert("Coșul de cumpărături este gol! Adaugă produse înainte de a plasa o comandă.");
         return; // Oprește execuția funcției
     }
 
-    // Aici, într-un proiect real, ai avea un formular complex.
-    // Pentru simulare, cerem doar un nume.
-    const customerName = prompt("Introduceți numele dumneavoastră pentru comandă:");
-    if (!customerName) { // Dacă utilizatorul apasă Cancel sau lasă gol
-        alert("Comanda a fost anulată.");
-        return;
-    }
-
+    // ... restul codului funcției rămâne la fel ...
     // Construim un obiect cu toate detaliile comenzii pentru afișare
     const orderDetails = {
-        id: Date.now().toString(), // Un ID unic, bazat pe timestamp-ul curent (număr mare)
-        customer: customerName,
-        items: cart, // Toate produsele din coș
-        total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0), // Calculează totalul general
-        date: new Date().toLocaleString() // Data și ora curente, formatate local
+        id: Date.now().toString(),
+        customer: customerName, // Folosim numele primit ca parametru
+        items: cart,
+        total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+        date: new Date().toLocaleString()
     };
 
-    // Aici este partea importantă pentru licență: afișăm detaliile comenzii în consola browserului.
-    // Profesorul va deschide Developer Tools (F12) și va vedea acest obiect.
     console.log("DETALII COMANDĂ SIMULATĂ:", orderDetails);
 
-    // Mesaj de confirmare pentru utilizator
-    alert(`Comanda dumneavoastră a fost plasată cu succes, ${customerName}! Veți fi contactat în curând. Detaliile au fost salvate în consolă.`);
+    showAlert(`Comanda dumneavoastră a fost plasată cu succes, ${customerName}! Veți fi contactat în curând.`);
 
-    clearCart(); // Golește coșul după plasarea comenzii
-    // Într-un proiect real, aici ai redirecționa la o pagină de "Mulțumim pentru comandă!".
+    clearCart();
 }
 
 // js/cart.js (la sfârșitul fișierului, după blocul "DOMContentLoaded")
@@ -223,5 +328,5 @@ if (clearCartBtn) {
 // Adaugă event listener pentru butonul "Plasează Comanda"
 const checkoutBtn = document.getElementById('checkout-btn');
 if (checkoutBtn) {
-    checkoutBtn.addEventListener('click', simulateOrderPlacement); // Când se dă click, apelează funcția simulateOrderPlacement
+    checkoutBtn.addEventListener('click', showOrderPrompt); // Acum, click-ul deschide modala
 }
