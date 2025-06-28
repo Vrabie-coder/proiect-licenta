@@ -1,0 +1,78 @@
+/* Reset CSS de bază */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f8f8f8; /* Un gri foarte deschis */
+    color: #333;
+}
+
+.container {
+    width: 80%; /* Lățimea conținutului */
+    margin: auto; /* Centrează conținutul */
+    overflow: hidden; /* Clearfix */
+}
+
+/* Stiluri Header */
+header {
+    background-color: #f0a000; /* Culoare caldă de miere */
+    color: white;
+    padding: 1rem 0;
+    border-bottom: 3px solid #d48e00;
+}
+
+header h1 {
+    float: left;
+    margin: 0;
+}
+
+header h1 a {
+    color: white;
+    text-decoration: none;
+    font-size: 2em;
+}
+
+header nav {
+    float: right;
+    margin-top: 10px;
+}
+
+header ul {
+    list-style: none;
+}
+
+header li {
+    display: inline;
+    padding: 0 15px;
+}
+
+header a {
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+header a:hover {
+    color: #ddd;
+}
+
+/* Stiluri Main content */
+main {
+    padding: 20px 0;
+    min-height: 60vh; /* Asigură că main ocupă suficient spațiu */
+}
+
+/* Stiluri Footer */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 20px;
+}
