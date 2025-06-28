@@ -5,17 +5,21 @@
     <link rel="stylesheet" href="css/style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Produsele noastre</title>
 </head>
 
 <body>
-    <header>
-    <div class="container"> <h1><a href="index.html">Miere Naturală</a></h1>
+<header>
+    <div class="container">
+        <div class="brand"> <a href="index.html">
+                <img src="img/bee-hive.png" alt="Stupina Vrăbiuțelor Logo" class="header-logo"> <span class="site-title">Stupina Vrăbiuțelor</span> </a>
+        </div>
         <nav>
             <ul>
                 <li><a href="index.html">Acasă</a></li>
                 <li><a href="produse.html">Produse</a></li>
                 <li><a href="contact.html">Contact</a></li>
+                <li><a href="cos.html">Coș (<span id="cart-item-count">0</span>)</a></li>
             </ul>
         </nav>
     </div>
@@ -33,6 +37,32 @@
         <p>&copy; 2025 Miere Naturală. Toate drepturile rezervate.</p>
     </div>
 </footer>
+
+<script src="js/cart.js"></script>
 </body>
+
+<h2>Gama Noastră de Miere Naturală</h2>
+<section class="products-grid"> <div class="product-card">
+        <img src="img\borcangol.png" alt="Miere de Salcâm">
+        <h3>Miere de Salcâm Bio</h3>
+        <p>O miere delicată și parfumată, ideală pentru ceai sau deserturi.</p>
+        <p class="price">Preț: <span>55 RON</span></p>
+        <button class="add-to-cart-btn" data-product-id="1" data-product-name="Miere de Salcâm Bio" data-product-price="55">Adaugă în Coș</button>
+    </div>
+    <div class="product-card">
+        <img src="https://picsum.photos/300/200?random=2" alt="Miere Polifloră">
+        <h3>Miere Polifloră Tradițională</h3>
+        <p>Gustoasă și aromată, culeasă din flora diversă a dealurilor noastre.</p>
+        <p class="price">Preț: <span>48 RON</span></p>
+        <button class="add-to-cart-btn" data-product-id="2" data-product-name="Miere Polifloră Tradițională" data-product-price="48">Adaugă în Coș</button>
+    </div>
+    <div class="product-card">
+        <img src="https://picsum.photos/300/200?random=3" alt="Miere de Tei">
+        <h3>Miere de Tei Aromatică</h3>
+        <p>Recunoscută pentru proprietățile sale calmante și aroma sa distinctă.</p>
+        <p class="price">Preț: <span>62 RON</span></p>
+        <button class="add-to-cart-btn" data-product-id="3" data-product-name="Miere de Tei Aromatică" data-product-price="62">Adaugă în Coș</button>
+    </div>
+    </section>
 
 </html>

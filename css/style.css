@@ -1,3 +1,5 @@
+/* style.css */
+
 /* Reset CSS de bază */
 * {
     margin: 0;
@@ -14,8 +16,9 @@ body {
 
 .container {
     width: 80%; /* Lățimea conținutului */
+    max-width: 1200px; /* Limitează lățimea maximă */
     margin: auto; /* Centrează conținutul */
-    overflow: hidden; /* Clearfix */
+    overflow: hidden; /* Clearfix pentru float-uri vechi, dar bun și pentru flexbox */
 }
 
 /* Stiluri Header */
@@ -26,40 +29,60 @@ header {
     border-bottom: 3px solid #d48e00;
 }
 
-header h1 {
-    float: left;
-    margin: 0;
+header .container { /* Aplicăm flexbox pe containerul din header */
+    display: flex;
+    justify-content: space-between; /* Împinge brand-ul și navigația la capete opuse */
+    align-items: center; /* Centrează vertical elementele */
 }
 
-header h1 a {
-    color: white;
-    text-decoration: none;
-    font-size: 2em;
+/* Stiluri pentru zona de brand (logo + titlu text) */
+.brand {
+    display: flex; /* Folosim flexbox pentru a alinia logo-ul și titlul */
+    align-items: center; /* Centrează vertical elementele din brand */
+    gap: 10px; /* Spațiu între logo și titlu text */
 }
 
-header nav {
-    float: right;
-    margin-top: 10px;
+.brand a { /* Asigură că link-ul nu strică alinierea și că textul este alb */
+    display: flex;
+    align-items: center;
+    text-decoration: none; /* Elimină sublinierea de pe link */
+    color: white; /* Asigură că textul rămâne alb */
 }
 
-header ul {
+.header-logo { /* Stiluri pentru imaginea logo-ului */
+    height: 60px; /* Ajustează înălțimea logo-ului. Poți încerca și 70px sau 50px */
+    width: auto; /* Păstrează raportul de aspect */
+}
+
+.site-title { /* Stiluri pentru textul "Stupina Vrăbiuțelor" */
+    color: white; /* Culoarea textului (alb) */
+    font-size: 2.2em; /* Mărimea fontului pentru titlu. Ajustează după preferință */
+    font-weight: bold;
+    white-space: nowrap; /* Previne ruperea textului pe mai multe rânduri */
+}
+
+/* Stiluri Navigație */
+header nav ul {
     list-style: none;
+    padding: 0;
+    margin: 0; /* Asigură că nu există margini implicite */
 }
 
-header li {
+header nav ul li {
     display: inline;
     padding: 0 15px;
 }
 
-header a {
+header nav a {
     color: white;
     text-decoration: none;
     text-transform: uppercase;
     font-weight: bold;
+    transition: color 0.3s ease; /* Efect de tranziție la hover */
 }
 
-header a:hover {
-    color: #ddd;
+header nav a:hover {
+    color: #ddd; /* Culoare mai deschisă la hover */
 }
 
 /* Stiluri Main content */
@@ -68,11 +91,254 @@ main {
     min-height: 60vh; /* Asigură că main ocupă suficient spațiu */
 }
 
+/* Stiluri pentru Hero Section (Acasă) */
+.hero-section {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px; /* Adaugă puțin padding */
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.hero-section img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    object-fit: cover; /* Asigură că imaginea acoperă spațiul fără a se deforma */
+}
+
+.hero-section h2 {
+    font-size: 2.5em;
+    color: #f0a000;
+    margin-bottom: 15px;
+}
+
+.hero-section p {
+    font-size: 1.1em;
+    margin-bottom: 25px;
+}
+
+.btn-primary {
+    display: inline-block;
+    background-color: #d48e00;
+    color: white;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #f0a000;
+}
+
+/* Stiluri pentru Features Section (Acasă) */
+.features-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.feature-item {
+    background-color: white;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.feature-item h3 {
+    color: #f0a000;
+    margin-bottom: 10px;
+}
+
+/* Stiluri pentru grila de produse (Pagina Produse) */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* 3 coloane pe desktop, se ajustează pentru mobil */
+    gap: 25px; /* Spațiu între carduri */
+    padding: 20px 0;
+    margin-top: 20px; /* Spațiu deasupra grilei */
+}
+
+.product-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: flex; /* Pentru a aranja conținutul în card */
+    flex-direction: column;
+    justify-content: space-between; /* Împinge conținutul spre margini */
+}
+
+.product-card img {
+    max-width: 100%;
+    height: auto; /* Asigură că imaginea își păstrează proporțiile */
+    max-height: 200px; /* Limitează înălțimea imaginilor din card */
+    border-radius: 5px;
+    margin-bottom: 10px;
+    object-fit: cover; /* Asigură că imaginea umple spațiul fără a se deforma */
+}
+
+.product-card h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #f0a000;
+}
+
+.product-card p {
+    font-size: 0.9em;
+    margin-bottom: 15px;
+    flex-grow: 1; /* Permite paragrafului să ocupe spațiu disponibil */
+}
+
+.product-card .price {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #d48e00;
+    margin-bottom: 15px;
+}
+
+.product-card button {
+    background-color: #f0a000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.product-card button:hover {
+    background-color: #d48e00;
+}
+
+/* Stiluri pentru Pagina Contact */
+.contact-info {
+    margin-top: 20px;
+    line-height: 1.8;
+    font-size: 1.1em;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.contact-info p {
+    margin-bottom: 10px;
+}
+
+.map-container {
+    margin-top: 30px;
+    overflow: hidden;
+    padding-bottom: 56.25%; /* Raport de aspect 16:9 pentru hărți responsive */
+    position: relative;
+    height: 0;
+    background-color: white; /* Fundal alb pentru containerul hărții */
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.map-container iframe {
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    border: 0; /* Elimină bordura default a iframe-ului */
+    border-radius: 8px; /* Aplică border-radius și iframe-ului */
+}
+
 /* Stiluri Footer */
 footer {
     background-color: #333;
     color: white;
     text-align: center;
     padding: 1rem 0;
-    margin-top: 20px;
+    margin-top: 20px; /* Spațiu deasupra footer-ului */
+}
+
+/* Media Queries pentru Responsivitate */
+@media (max-width: 992px) { /* Tabletă */
+    .container {
+        width: 90%;
+    }
+    .hero-section h2 {
+        font-size: 2em;
+    }
+    .site-title {
+        font-size: 2em;
+    }
+    .header-logo {
+        height: 50px;
+    }
+}
+
+@media (max-width: 768px) { /* Telefoane și tablete mici */
+    .container {
+        width: 95%;
+    }
+
+    header .container {
+        flex-direction: column; /* Pe mobil, punem logo-ul/titlul deasupra navigației */
+        text-align: center;
+    }
+
+    .brand {
+        margin-bottom: 15px; /* Spațiu sub logo/titlu */
+        flex-direction: column; /* Logo și titlu text pe verticală */
+        gap: 5px; /* Spațiu mai mic */
+    }
+
+    .site-title {
+        font-size: 1.8em; /* Reducem mărimea fontului pentru titlu pe mobil */
+    }
+
+    .header-logo {
+        height: 45px; /* Reducem mărimea logo-ului pe mobil */
+    }
+
+    header nav ul {
+        margin-top: 10px;
+    }
+
+    header nav ul li {
+        padding: 0 8px; /* Spațiu mai mic între elementele navigației pe mobil */
+    }
+
+    .hero-section h2 {
+        font-size: 1.8em;
+    }
+
+    .btn-primary {
+        padding: 10px 20px;
+    }
+
+    .products-grid {
+        grid-template-columns: 1fr; /* O singură coloană pe mobil pentru carduri */
+    }
+}
+
+@media (max-width: 480px) { /* Telefoane foarte mici */
+    .site-title {
+        font-size: 1.5em;
+    }
+    .header-logo {
+        height: 40px;
+    }
+    /* Poți face elementele de navigare să stea pe o singură coloană dacă e foarte îngust */
+    /*
+    header nav ul li {
+        display: block;
+        margin: 5px 0;
+    }
+    */
 }
