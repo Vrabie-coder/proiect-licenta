@@ -27,8 +27,6 @@ function loginUser(username, password) {
     }
 }
 
-// admin.js (Continuare)
-
 // Funcții pentru modala de Adăugare/Editare Produs
 function openProductModal(product = null) {
     const modal = document.getElementById('product-modal');
@@ -73,8 +71,6 @@ function closeProductModal() {
     currentEditingProductId = null; // Resetează ID-ul
 }
 
-// admin.js (Continuare)
-
 // Funcție pentru a obține toate produsele
 function getProducts() {
     return JSON.parse(localStorage.getItem('products')) || [];
@@ -83,7 +79,10 @@ function getProducts() {
 // Funcție pentru a salva produsele (după o modificare)
 function saveProducts(products) {
     localStorage.setItem('products', JSON.stringify(products));
-    updateCartItemCount(); // Asigură că numărul de produse din coș este actualizat pe toate paginile
+    // updateCartItemCount(); // Această funcție este definită în cart.js.
+                          // Deși poate fi apelată aici dacă cart.js e încărcat global,
+                          // este mai curat ca admin.js să nu depindă direct de ea.
+                          // O voi lăsa comentată pentru claritate, dar poți decide.
 }
 
 // Funcție pentru a adăuga/edita un produs
@@ -95,7 +94,7 @@ function saveProduct(product) {
             products[index] = product;
         }
     } else { // Este un produs nou
-        product.id = Date.now().toString(); // Generează un ID unic
+        product.id = 'prod_' + Date.now().toString(); // Generează un ID unic cu prefix
         products.push(product);
     }
     saveProducts(products);
@@ -131,6 +130,75 @@ function logoutUser() {
         window.location.href = 'index.html'; // Redirecționează către pagina principală
     }, 1500);
 }
+
+// NOU: Funcție pentru a inițializa produsele default DOAR O SINGURĂ DATĂ
+function initializeDefaultProductsIfEmpty() {
+    const products = getProducts(); // Încercăm să citim produsele existente
+
+    if (products.length === 0) { // Dacă nu există produse salvate
+        const defaultProducts = [{
+            id: 'prod_1',
+            name: 'Miere de Salcâm/kg',
+            description: 'Miere pură de salcâm, recoltată din flora bogată a luncilor.',
+            price: 40.00,
+            image: 'img/Miere_salcam.jpg' // Asigură-te că ai acest folder și imagini
+        }, {
+            id: 'prod_2',
+            name: 'Miere Polifloră/kg',
+            description: 'Un amestec delicios de nectar de la diverse flori, cu o aromă bogată.',
+            price: 25.00,
+            image: 'img/Miere_poliflora.jpg'
+        }, {
+            id: 'prod_3',
+            name: 'Miere de Fâneață/kg',
+            description: 'Miere cu aromă de flori de dealuri și podișuri.',
+            price: 30.00,
+            image: 'img/Miere_faneata.jpg'
+        }, {
+            id: 'prod_4',
+            name: 'Miere de Mană/kg',
+            description: 'Miere de pădure, culoare închisă și gust intens, bogată în minerale.',
+            price: 35.00,
+            image: 'img/Miere_mana.jpg'
+        }, ];
+        saveProducts(defaultProducts); // Salvează produsele default în localStorage
+        console.log("Produse default inițializate în localStorage.");
+    }
+}
+
+
+// Funcție pentru a afișa produsele în panoul de administrare
+function displayAdminProducts() {
+    const products = getProducts(); // Acum citește din localStorage
+    const productListAdmin = document.getElementById('product-list-admin');
+
+    if (!productListAdmin) return;
+
+    productListAdmin.innerHTML = ''; // Golește lista existentă
+
+    if (products.length === 0) {
+        productListAdmin.innerHTML = '<p class="error-message" style="width: 100%; text-align: center;">Niciun produs disponibil. Adaugă produse folosind butonul de mai sus.</p>';
+        return;
+    }
+
+    products.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.classList.add('product-card', 'admin-product-card');
+
+        productCard.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+            <h4>${product.name}</h4>
+            <p>${product.description}</p>
+            <p class="price">${product.price.toFixed(2)} RON</p>
+            <div class="admin-actions">
+                <button class="btn-primary edit-product-btn" data-id="${product.id}">Editează</button>
+                <button class="btn-secondary delete-product-btn" data-id="${product.id}">Șterge</button>
+            </div>
+        `;
+        productListAdmin.appendChild(productCard);
+    });
+}
+
 
 // 2. Logică pentru afișarea/ascunderea link-ului de admin/logout în navigație
 document.addEventListener('DOMContentLoaded', () => {
@@ -185,145 +253,79 @@ document.addEventListener('DOMContentLoaded', () => {
             return; // Oprește execuția ulterioară a scriptului pentru admin
         }
 
+        // NOU: Inițializăm produsele default DOAR O DATA, înainte de a afișa panoul admin
+        initializeDefaultProductsIfEmpty(); // <-- Adaugă această linie
+
         // Adaugă event listener pentru butonul de deconectare
         const logoutBtn = document.getElementById('logout-btn');
         if (logoutBtn) {
             logoutBtn.addEventListener('click', logoutUser);
         }
 
-        // admin.js (Continuare)
+        // Adaugă event listener pentru butonul "Adaugă Produs Nou"
+        const addProductBtn = document.getElementById('add-product-btn');
+        if (addProductBtn) {
+            addProductBtn.addEventListener('click', () => openProductModal());
+        }
 
-// ... în interiorul if (adminPanel) { ... } blocul din DOMContentLoaded ...
+        // Adaugă event listener pentru butonul de închidere al modalei de produs
+        const productModalClose = document.getElementById('product-modal-close');
+        if (productModalClose) {
+            productModalClose.addEventListener('click', closeProductModal);
+        }
 
-    // Adaugă event listener pentru butonul "Adaugă Produs Nou"
-    const addProductBtn = document.getElementById('add-product-btn');
-    if (addProductBtn) {
-        addProductBtn.addEventListener('click', () => openProductModal());
-    }
+        // Adaugă event listener pentru submit-ul formularului de produs
+        const productForm = document.getElementById('product-form');
+        if (productForm) {
+            productForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const productId = document.getElementById('product-id').value;
+                const name = document.getElementById('product-name').value.trim();
+                const description = document.getElementById('product-description').value.trim();
+                const price = parseFloat(document.getElementById('product-price').value);
+                const image = document.getElementById('product-image').value.trim();
+                const errorMessage = document.getElementById('product-form-error');
 
-    // Adaugă event listener pentru butonul de închidere al modalei de produs
-    const productModalClose = document.getElementById('product-modal-close');
-    if (productModalClose) {
-        productModalClose.addEventListener('click', closeProductModal);
-    }
-
-    // Adaugă event listener pentru submit-ul formularului de produs
-    const productForm = document.getElementById('product-form');
-    if (productForm) {
-        productForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const productId = document.getElementById('product-id').value;
-            const name = document.getElementById('product-name').value.trim();
-            const description = document.getElementById('product-description').value.trim();
-            const price = parseFloat(document.getElementById('product-price').value);
-            const image = document.getElementById('product-image').value.trim();
-            const errorMessage = document.getElementById('product-form-error');
-
-            if (name === '' || description === '' || isNaN(price) || price < 0 || image === '') {
-                errorMessage.textContent = 'Toate câmpurile sunt obligatorii și prețul trebuie să fie un număr pozitiv.';
-                return;
-            }
-
-            const productData = {
-                id: productId, // Va fi gol la adăugare, populat la editare
-                name,
-                description,
-                price,
-                image
-            };
-
-            saveProduct(productData); // Funcția care adaugă/editează
-        });
-    }
-
-    // Adaugă event listeners pentru butoanele de editare și ștergere (delegare de evenimente)
-    // Deoarece aceste butoane sunt generate dinamic, trebuie să folosim delegare de evenimente pe un element părinte.
-    const productListAdmin = document.getElementById('product-list-admin');
-    if (productListAdmin) {
-        productListAdmin.addEventListener('click', (e) => {
-            if (e.target.classList.contains('edit-product-btn')) {
-                const productId = e.target.dataset.id;
-                const products = getProducts();
-                const productToEdit = products.find(p => p.id === productId);
-                if (productToEdit) {
-                    openProductModal(productToEdit); // Deschide modala în modul edit
+                if (name === '' || description === '' || isNaN(price) || price < 0 || image === '') {
+                    errorMessage.textContent = 'Toate câmpurile sunt obligatorii și prețul trebuie să fie un număr pozitiv.';
+                    return;
                 }
-            } else if (e.target.classList.contains('delete-product-btn')) {
-                const productId = e.target.dataset.id;
-                deleteProduct(productId); // Apelează funcția de ștergere
-            }
-        });
-    }
+
+                const productData = {
+                    id: productId, // Va fi gol la adăugare, populat la editare
+                    name,
+                    description,
+                    price,
+                    image
+                };
+
+                saveProduct(productData); // Funcția care adaugă/editează
+            });
+        }
+
+        // Adaugă event listeners pentru butoanele de editare și ștergere (delegare de evenimente)
+        const productListAdmin = document.getElementById('product-list-admin');
+        if (productListAdmin) {
+            productListAdmin.addEventListener('click', (e) => {
+                if (e.target.classList.contains('edit-product-btn')) {
+                    const productId = e.target.dataset.id;
+                    const products = getProducts();
+                    const productToEdit = products.find(p => p.id === productId);
+                    if (productToEdit) {
+                        openProductModal(productToEdit); // Deschide modala în modul edit
+                    }
+                } else if (e.target.classList.contains('delete-product-btn')) {
+                    const productId = e.target.dataset.id;
+                    deleteProduct(productId); // Apelează funcția de ștergere
+                }
+            });
+        }
 
         // Aici vom adăuga funcționalitatea de afișare/gestionare a produselor
-        displayAdminProducts();
+        displayAdminProducts(); // Acum va afișa și produsele default după inițializare
     }
 });
 
-
-// Funcție pentru a afișa produsele în panoul de administrare (doar citire deocamdată)
-function displayAdminProducts() {
-    const products = JSON.parse(localStorage.getItem('products')) || [];
-    const productListAdmin = document.getElementById('product-list-admin');
-
-    if (!productListAdmin) return;
-
-    productListAdmin.innerHTML = ''; // Golește lista existentă
-
-    if (products.length === 0) {
-        productListAdmin.innerHTML = '<p class="error-message" style="width: 100%; text-align: center;">Niciun produs disponibil. Adaugă produse folosind butonul de mai sus.</p>';
-        return;
-    }
-
-    products.forEach(product => {
-        const productCard = document.createElement('div');
-        productCard.classList.add('product-card', 'admin-product-card'); // Folosim și clasa existentă product-card
-
-        productCard.innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
-            <h4>${product.name}</h4>
-            <p>${product.description}</p>
-            <p class="price">${product.price.toFixed(2)} RON</p>
-            <div class="admin-actions">
-                <button class="btn-primary edit-product-btn" data-id="${product.id}">Editează</button>
-                <button class="btn-secondary delete-product-btn" data-id="${product.id}">Șterge</button>
-            </div>
-        `;
-        productListAdmin.appendChild(productCard);
-    });
-}
-
-// Asigură-te că funcția showAlert este disponibilă global, dacă nu este deja în cart.js
-// Dacă funcția showAlert este definită doar în cart.js, trebuie să te asiguri că
-// fișierul admin.js este încărcat după cart.js în HTML, ceea ce am și făcut.
-// Dacă ai scos-o din cart.js, atunci adaug-o aici:
-/*
-function showAlert(message) {
-    const modal = document.getElementById('custom-alert-modal');
-    const alertMessage = document.getElementById('alert-message');
-    const okButton = document.getElementById('alert-ok-button');
-
-    if (!modal || !alertMessage || !okButton) {
-        console.error('Elemente lipsă pentru modala de alertă!');
-        return;
-    }
-
-    alertMessage.textContent = message;
-    modal.classList.add('show');
-
-    const closeAlert = () => {
-        modal.classList.remove('show');
-        okButton.removeEventListener('click', closeAlert);
-        window.removeEventListener('click', clickOutsideAlert);
-    };
-
-    okButton.addEventListener('click', closeAlert);
-
-    const clickOutsideAlert = (event) => {
-        if (event.target === modal) {
-            closeAlert();
-        }
-    };
-    window.addEventListener('click', clickOutsideAlert);
-}
-*/
+// Nota: funcția showAlert trebuie să fie definită într-un fișier accesibil global (ex: main.js sau util.js)
+// sau să fie definită direct în acest fișier dacă nu ai un fișier utilitar separat.
+// Presupun că showAlert este deja definită și funcțională.

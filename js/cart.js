@@ -371,3 +371,104 @@ const checkoutBtn = document.getElementById('checkout-btn');
 if (checkoutBtn) {
     checkoutBtn.addEventListener('click', showOrderPrompt); // Acum, click-ul deschide modala
 }
+
+// js/cart.js
+
+// ... (getCart, saveCart, showAlert etc. rămân la fel) ...
+
+// Funcție pentru a afișa produsele pe pagina produse.html
+// Această funcție va prelua produsele din localStorage
+function displayProductsOnStorePage() {
+    const productsGridElement = document.getElementById('products-grid');
+    if (!productsGridElement) return; // Ieși dacă nu ești pe pagina produse.html
+
+    productsGridElement.innerHTML = ''; // Golește conținutul existent
+
+    // ATENȚIE: Presupunem că funcția getProducts() este acum definită în admin.js
+    // sau că este globală (dacă o muți în utils.js ulterior).
+    // Pentru a evita o eroare, o vom defini temporar aici sau ne asigurăm că e globală.
+    // CEL MAI BINE e să o muți în utils.js, dar dacă nu vrei utils.js încă, o definim aici:
+    const products = JSON.parse(localStorage.getItem('products')) || [];
+
+    if (products.length === 0) {
+        productsGridElement.innerHTML = '<p class="empty-cart-message" style="width: 100%; text-align: center;">Momentan nu sunt produse disponibile. Vă rugăm să reveniți mai târziu.</p>';
+        return;
+    }
+
+    products.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.classList.add('product-card');
+        productCard.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+            <h3>${product.name}</h3>
+            <p>${product.description}</p>
+            <p class="price">${product.price.toFixed(2)} RON</p>
+            <button class="add-to-cart-btn"
+                    data-product-id="${product.id}"
+                    data-product-name="${product.name}"
+                    data-product-price="${product.price.toFixed(2)}"
+                    data-product-image="${product.image}">Adaugă în Coș</button>
+        `;
+        productsGridElement.appendChild(productCard);
+    });
+}
+
+// Modifică funcția addToCart pentru a prelua mai multe date
+function addToCart(productId, productName, productPrice, productImage) { // Adaugă productImage
+    let cart = getCart();
+
+    let found = false;
+    for (let i = 0; i < cart.length; i++) {
+        if (cart[i].id === productId) {
+            cart[i].quantity++;
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        cart.push({
+            id: productId,
+            name: productName,
+            price: productPrice,
+            image: productImage, // Salvează și imaginea în coș
+            quantity: 1
+        });
+    }
+
+    saveCart(cart);
+    updateCartDisplay();
+    updateCartItemCount();
+    showAlert(`${productName} a fost adăugat în coș!`);
+}
+
+// Modifică event listener-ul pentru butoanele "Adaugă în Coș"
+document.addEventListener('DOMContentLoaded', () => {
+    // ... (restul codului existent) ...
+
+    // Inițializarea afișajului coșului și a contorului la încărcarea paginii
+    updateCartDisplay();
+    updateCartItemCount();
+
+    // NOU: Aici apelăm funcția pentru a afișa produsele pe pagina produse.html
+    displayProductsOnStorePage(); // <--- Adaugă această linie
+
+    // Actualizează event listener-ul pentru butoanele de adăugare în coș
+    // Acum le vom face să preia datele din dataset-ul butonului.
+    const productsGrid = document.getElementById('products-grid'); // Preia elementul părinte
+    if (productsGrid) {
+        productsGrid.addEventListener('click', (event) => { // Delegare de evenimente
+            const target = event.target;
+            if (target.classList.contains('add-to-cart-btn')) {
+                const productId = target.dataset.productId;
+                const productName = target.dataset.productName;
+                const productPrice = parseFloat(target.dataset.productPrice);
+                const productImage = target.dataset.productImage; // Preia imaginea
+
+                addToCart(productId, productName, productPrice, productImage); // Trimite și imaginea
+            }
+        });
+    }
+
+    // ... restul event listener-ilor pentru coș, checkout etc.
+});
