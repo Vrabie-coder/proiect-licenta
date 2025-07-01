@@ -24,38 +24,79 @@ function saveCart(cart) {
 }
 
 // Funcție pentru a afișa un pop-up personalizat în loc de alert()
-function showAlert(message) {
-    const modal = document.getElementById('custom-alert-modal'); // Obține elementul modal principal
-    const alertMessageElement = document.getElementById('alert-message'); // Obține elementul unde va fi afișat mesajul
-    const closeButton = document.querySelector('.close-button'); // Obține butonul de închidere (X)
-    const okButton = document.getElementById('alert-ok-button'); // Obține butonul "OK"
+// Funcție generală de alertă/confirmare
+// Adăugată inițial în cart.js, asigură-te că este disponibilă.
+function showAlert(message, type = 'alert', onConfirm = null, onCancel = null) {
+    const modal = document.getElementById('custom-alert-modal');
+    const alertMessage = document.getElementById('alert-message');
+    const okButton = document.getElementById('alert-ok-button');
+    const closeButton = modal.querySelector('.close-button'); // Ia butonul de închidere X
 
-    // Ne asigurăm că toate elementele HTML necesare există înainte de a încerca să le manipulăm
-    if (modal && alertMessageElement && closeButton && okButton) {
-        alertMessageElement.textContent = message; // Setează textul mesajului în pop-up
-        modal.classList.add('show'); // Adaugă clasa 'show' la modal, făcându-l vizibil prin CSS
+    // Adaugă un buton de anulare pentru confirmări
+    let cancelButton = document.getElementById('alert-cancel-button');
+    if (!cancelButton) { // Creează butonul de anulare dacă nu există
+        cancelButton = document.createElement('button');
+        cancelButton.id = 'alert-cancel-button';
+        cancelButton.classList.add('btn-secondary');
+        cancelButton.textContent = 'Anulează';
+        okButton.parentNode.insertBefore(cancelButton, okButton.nextSibling); // Inserează după OK
+    }
 
-        // Funcție internă pentru a închide modala
-        const closeModal = () => {
-            modal.classList.remove('show'); // Elimină clasa 'show', ascunzând modala
-            // **Foarte important:** Eliminăm event listener-ele pentru a preveni acumularea lor
-            closeButton.removeEventListener('click', closeModal);
-            okButton.removeEventListener('click', closeModal);
-            window.removeEventListener('click', clickOutsideModal); // Elimină și listener-ul pentru click în afara modalei
+    if (!modal || !alertMessage || !okButton || !closeButton || !cancelButton) {
+        console.error('Elemente lipsă pentru modala de alertă/confirmare!');
+        return;
+    }
+
+    alertMessage.textContent = message;
+
+    // Resetăm listener-ele pentru a evita multiple execuții
+    okButton.onclick = null;
+    cancelButton.onclick = null;
+    closeButton.onclick = null;
+
+    // Resetăm stilurile butoanelor
+    okButton.style.display = 'inline-block';
+    cancelButton.style.display = 'none'; // Ascunde butonul Anulează implicit
+
+    if (type === 'confirm') {
+        cancelButton.style.display = 'inline-block'; // Afișează butonul Anulează
+        okButton.textContent = 'Confirmă';
+
+        okButton.onclick = () => {
+            closeAlert();
+            if (onConfirm) onConfirm();
         };
-
-        // Adaugă event listener-e pentru închiderea modalei la click pe "X" sau "OK"
-        closeButton.addEventListener('click', closeModal);
-        okButton.addEventListener('click', closeModal);
-
-        // Adaugă event listener pentru a închide modala dacă se dă click în afara conținutului ei
-        const clickOutsideModal = (event) => {
-            // Dacă elementul pe care s-a dat click este chiar containerul modal (adică fundalul întunecat)
-            if (event.target === modal) {
-                closeModal(); // Atunci închide modala
-            }
+        cancelButton.onclick = () => {
+            closeAlert();
+            if (onCancel) onCancel();
         };
-        window.addEventListener('click', clickOutsideModal);
+        closeButton.onclick = () => { // X-ul face Anulează
+            closeAlert();
+            if (onCancel) onCancel();
+        };
+    } else { // Tip 'alert' (implicit)
+        okButton.textContent = 'OK';
+        okButton.onclick = closeAlert;
+        closeButton.onclick = closeAlert; // X-ul face OK
+    }
+
+    modal.classList.add('show');
+
+    // Handler pentru click în afara modalei
+    const clickOutsideAlert = (event) => {
+        if (event.target === modal) {
+            closeAlert();
+            if (type === 'confirm' && onCancel) onCancel(); // Dacă e confirmare, click afară e anulare
+        }
+    };
+    // Asigură-te că adaugi listener-ul doar o singură dată sau îl elimini la închidere
+    window.removeEventListener('click', clickOutsideAlert); // Elimină orice listener vechi
+    window.addEventListener('click', clickOutsideAlert);
+
+    // Funcția internă pentru închiderea modalei și curățarea listener-elor
+    function closeAlert() {
+        modal.classList.remove('show');
+        window.removeEventListener('click', clickOutsideAlert); // Elimină listener-ul pentru click-uri în afară
     }
 }
 // js/cart.js (Continuare)

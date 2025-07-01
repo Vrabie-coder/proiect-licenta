@@ -481,9 +481,157 @@ footer {
     /* Nu mai este nevoie de reguli specifice aici, clasa btn-secondary ar trebui să fie suficientă */
 }
 
-
 #order-prompt-error {
     margin-top: 15px;
     color: #dc3545; /* Roșu pentru erori */
     font-weight: bold;
+}
+
+/* Stiluri pentru Pagina de Login și Panoul de Administrare */
+.login-section, .admin-panel {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    max-width: 600px;
+    margin: 40px auto; /* Centrează pe pagină */
+    text-align: center;
+}
+
+.login-section h2, .admin-panel h2 {
+    color: #f0a000;
+    margin-bottom: 30px;
+    font-size: 2em;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left; /* Aliniază label-urile la stânga */
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="number"],
+.form-group input[type="url"],
+.form-group textarea {
+    width: calc(100% - 22px); /* Lățime completă minus padding și border */
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box; /* Include padding și border în lățime */
+}
+
+.form-group textarea {
+    resize: vertical; /* Permite redimensionarea pe verticală */
+    min-height: 80px;
+}
+
+.login-section .btn-primary {
+    width: 100%; /* Butonul de login ocupă toată lățimea */
+    padding: 15px;
+    margin-top: 10px;
+}
+
+.error-message {
+    color: #dc3545; /* Roșu pentru mesaje de eroare */
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+/* Stiluri pentru Admin Panel */
+.admin-controls {
+    display: flex;
+    flex-wrap: wrap; /* Permite butoanelor să treacă pe rândul următor */
+    gap: 15px;
+    margin-bottom: 40px;
+    justify-content: center;
+}
+
+.admin-panel h3 {
+    color: #f0a000;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    text-align: left;
+}
+
+/* Ajustăm grila de produse pentru admin panel dacă e nevoie */
+#product-list-admin {
+    /* Aici poți adăuga stiluri specifice dacă vrei să difere de .products-grid din produse.html */
+}
+
+/* Stiluri pentru cardul de produs în admin (când le vom adăuga) */
+.admin-product-card {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center; /* Centrează conținutul */
+    text-align: center;
+}
+
+.admin-product-card img {
+    max-width: 100%;
+    height: 150px; /* Inaltime fixa pentru imagini in admin */
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.admin-product-card h4 {
+    font-size: 1.3em;
+    color: #f0a000;
+    margin-bottom: 5px;
+}
+
+.admin-product-card p {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 10px;
+    flex-grow: 1;
+}
+
+.admin-product-card .price {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #d48e00;
+    margin-bottom: 15px;
+}
+
+.admin-product-card .admin-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+}
+
+.admin-product-card .admin-actions .btn-primary,
+.admin-product-card .admin-actions .btn-secondary {
+    padding: 8px 15px;
+    font-size: 0.9em;
+    flex-grow: 1; /* Butoanele ocupa spatiul disponibil */
+}
+
+/* Ajustare media query pentru admin panel */
+@media (max-width: 768px) {
+    .admin-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .admin-controls .btn-primary,
+    .admin-controls .btn-secondary {
+        width: 80%; /* Butoanele admin ocupa mai multa latime pe mobil */
+    }
 }
