@@ -2,175 +2,169 @@
 
 // 1. Funcție pentru a obține coșul curent din Local Storage
 function getCart() {
-    // localStorage.getItem('shoppingCart') încearcă să citească o valoare de sub cheia 'shoppingCart'.
-    // Dacă nu găsește nimic, returnează null.
-    const cart = localStorage.getItem('shoppingCart');
-
-    // Operatorul ternar:
-    // 'cart ? JSON.parse(cart) : []' înseamnă:
-    // Dacă 'cart' (valoarea citită) există (nu e null sau undefined),
-    // atunci o parsează din JSON (text) înapoi într-un obiect/array JavaScript.
-    // Altfel (dacă e null), returnează un array gol ([]), indicând un coș gol.
-    return cart ? JSON.parse(cart) : [];
+    return JSON.parse(localStorage.getItem('shoppingCart')) || [];
 }
 
 // 2. Funcție pentru a salva coșul în Local Storage
 function saveCart(cart) {
-    // localStorage.setItem('shoppingCart', JSON.stringify(cart)) salvează un obiect/array JavaScript în Local Storage.
-    // Local Storage poate stoca doar string-uri. De aceea, folosim JSON.stringify()
-    // pentru a converti array-ul 'cart' într-un string în format JSON.
-    // 'shoppingCart' este cheia sub care va fi salvată informația.
     localStorage.setItem('shoppingCart', JSON.stringify(cart));
 }
 
-// Funcție pentru a afișa un pop-up personalizat în loc de alert()
-// Funcție generală de alertă/confirmare
-// Adăugată inițial în cart.js, asigură-te că este disponibilă.
+// Funcție generală de alertă/confirmare (mutată aici, poate fi și în util.js)
 function showAlert(message, type = 'alert', onConfirm = null, onCancel = null) {
     const modal = document.getElementById('custom-alert-modal');
     const alertMessage = document.getElementById('alert-message');
     const okButton = document.getElementById('alert-ok-button');
-    const closeButton = modal.querySelector('.close-button'); // Ia butonul de închidere X
-
-    // Adaugă un buton de anulare pentru confirmări
+    const closeButton = modal ? modal.querySelector('.close-button') : null;
     let cancelButton = document.getElementById('alert-cancel-button');
-    if (!cancelButton) { // Creează butonul de anulare dacă nu există
+
+    if (!modal || !alertMessage || !okButton) {
+        console.error('Elemente lipsă pentru modala de alertă/confirmare! Folosind fallback alert/confirm.');
+        if (type === 'confirm') {
+            if (confirm(message)) { if (onConfirm) onConfirm(); } else { if (onCancel) onCancel(); }
+        } else {
+            alert(message);
+        }
+        return;
+    }
+
+    // Creează butonul de anulare dacă nu există și e necesar
+    if (!cancelButton && okButton && okButton.parentNode) {
         cancelButton = document.createElement('button');
         cancelButton.id = 'alert-cancel-button';
         cancelButton.classList.add('btn-secondary');
         cancelButton.textContent = 'Anulează';
-        okButton.parentNode.insertBefore(cancelButton, okButton.nextSibling); // Inserează după OK
+        okButton.parentNode.insertBefore(cancelButton, okButton.nextSibling);
     }
-
-    if (!modal || !alertMessage || !okButton || !closeButton || !cancelButton) {
-        console.error('Elemente lipsă pentru modala de alertă/confirmare!');
+    if (!cancelButton && type === 'confirm') {
+        console.warn('Butonul de anulare nu a putut fi creat. Confirmarea va folosi prompt-ul browserului.');
+        if (confirm(message)) { if (onConfirm) onConfirm(); } else { if (onCancel) onCancel(); }
         return;
     }
 
     alertMessage.textContent = message;
 
-    // Resetăm listener-ele pentru a evita multiple execuții
     okButton.onclick = null;
-    cancelButton.onclick = null;
-    closeButton.onclick = null;
+    if (cancelButton) cancelButton.onclick = null;
+    if (closeButton) closeButton.onclick = null;
 
-    // Resetăm stilurile butoanelor
     okButton.style.display = 'inline-block';
-    cancelButton.style.display = 'none'; // Ascunde butonul Anulează implicit
+    if (cancelButton) cancelButton.style.display = 'none';
+
+    const closeAlert = () => {
+        modal.classList.remove('show');
+        window.removeEventListener('click', clickOutsideAlert);
+    };
 
     if (type === 'confirm') {
-        cancelButton.style.display = 'inline-block'; // Afișează butonul Anulează
+        if (cancelButton) cancelButton.style.display = 'inline-block';
         okButton.textContent = 'Confirmă';
 
-        okButton.onclick = () => {
-            closeAlert();
-            if (onConfirm) onConfirm();
-        };
-        cancelButton.onclick = () => {
-            closeAlert();
-            if (onCancel) onCancel();
-        };
-        closeButton.onclick = () => { // X-ul face Anulează
-            closeAlert();
-            if (onCancel) onCancel();
-        };
-    } else { // Tip 'alert' (implicit)
+        okButton.onclick = () => { closeAlert(); if (onConfirm) onConfirm(); };
+        if (cancelButton) cancelButton.onclick = () => { closeAlert(); if (onCancel) onCancel(); };
+        if (closeButton) closeButton.onclick = () => { closeAlert(); if (onCancel) onCancel(); };
+    } else {
         okButton.textContent = 'OK';
         okButton.onclick = closeAlert;
-        closeButton.onclick = closeAlert; // X-ul face OK
+        if (closeButton) closeButton.onclick = closeAlert;
     }
 
     modal.classList.add('show');
 
-    // Handler pentru click în afara modalei
     const clickOutsideAlert = (event) => {
         if (event.target === modal) {
             closeAlert();
-            if (type === 'confirm' && onCancel) onCancel(); // Dacă e confirmare, click afară e anulare
+            if (type === 'confirm' && onCancel) onCancel();
         }
     };
-    // Asigură-te că adaugi listener-ul doar o singură dată sau îl elimini la închidere
-    window.removeEventListener('click', clickOutsideAlert); // Elimină orice listener vechi
+    window.removeEventListener('click', clickOutsideAlert);
     window.addEventListener('click', clickOutsideAlert);
-
-    // Funcția internă pentru închiderea modalei și curățarea listener-elor
-    function closeAlert() {
-        modal.classList.remove('show');
-        window.removeEventListener('click', clickOutsideAlert); // Elimină listener-ul pentru click-uri în afară
-    }
 }
-// js/cart.js (Continuare)
 
-// Funcție pentru a afișa modala de prompt pentru comandă
+// Functie pentru a afișa modala de prompt pentru comandă
 function showOrderPrompt() {
     const modal = document.getElementById('order-prompt-modal');
     const customerNameInput = document.getElementById('customer-name-input');
+    const customerPhoneInput = document.getElementById('customer-phone-input'); // NOU
+    const customerAddressInput = document.getElementById('customer-address-input'); // NOU
     const submitButton = document.getElementById('order-prompt-submit');
     const cancelButton = document.getElementById('order-prompt-cancel');
     const closeButton = document.getElementById('order-prompt-close');
     const errorMessage = document.getElementById('order-prompt-error');
 
-    if (!modal || !customerNameInput || !submitButton || !cancelButton || !closeButton || !errorMessage) {
+    if (!modal || !customerNameInput || !customerPhoneInput || !customerAddressInput || !submitButton || !cancelButton || !closeButton || !errorMessage) {
         console.error('Elemente lipsă pentru modala de comandă!');
-        return; // Oprește execuția dacă elemente cruciale lipsesc
+        return;
     }
 
     // Resetăm starea modalei
-    customerNameInput.value = ''; // Golește input-ul
-    errorMessage.textContent = ''; // Golește mesajele de eroare
-    modal.classList.add('show'); // Afișează modala
+    customerNameInput.value = '';
+    customerPhoneInput.value = ''; // Reset NOU
+    customerAddressInput.value = ''; // Reset NOU
+    errorMessage.textContent = '';
+    modal.classList.add('show');
 
-    // Focus pe input pentru o experiență mai bună
     setTimeout(() => customerNameInput.focus(), 100);
 
-
-    // Handler pentru submit (Plasează Comanda)
     const handleSubmit = () => {
-        const customerName = customerNameInput.value.trim(); // Trim pentru a elimina spațiile goale de la început/sfârșit
+        const customerName = customerNameInput.value.trim();
+        const customerPhone = customerPhoneInput.value.trim(); // NOU
+        const customerAddress = customerAddressInput.value.trim(); // NOU
 
-        if (customerName === '') {
-            errorMessage.textContent = 'Numele este obligatoriu!';
+        if (customerName === '' || customerPhone === '' || customerAddress === '') {
+            errorMessage.textContent = 'Toate câmpurile sunt obligatorii (Nume, Telefon, Adresă)!';
             return;
         }
 
-        // Dacă numele este valid, închidem modala și continuăm cu plasarea comenzii
-        closeOrderPrompt(); // Închide modala
-        simulateOrderPlacement(customerName); // Apelează funcția de plasare a comenzii cu numele obținut
+        // --- Adaugă această nouă verificare pentru numărul de telefon ---
+        // Folosim o expresie regulată simplă pentru a verifica dacă sunt doar cifre și exact 10
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(customerPhone)) {
+            errorMessage.textContent = 'Numărul de telefon trebuie să conțină exact 10 cifre!';
+            return;
+        }
+        // -----------------------------------------------------------------
+
+        closeOrderPrompt();
+        // Trimitem toate datele colectate funcției de plasare a comenzii
+        simulateOrderPlacement(customerName, customerPhone, customerAddress);
     };
 
-    // Handler pentru cancel (Anulează)
     const handleCancel = () => {
-        closeOrderPrompt(); // Închide modala
-        showAlert("Comanda a fost anulată."); // Afișează alertă de anulare (noua modală de alertă)
+        closeOrderPrompt();
+        showAlert("Comanda a fost anulată.");
     };
 
-    // Funcție internă pentru a închide modala și a curăța listener-ele
     const closeOrderPrompt = () => {
         modal.classList.remove('show');
         submitButton.removeEventListener('click', handleSubmit);
         cancelButton.removeEventListener('click', handleCancel);
-        closeButton.removeEventListener('click', handleCancel); // X-ul face tot anulare
+        closeButton.removeEventListener('click', handleCancel);
         window.removeEventListener('click', clickOutsideOrderPrompt);
         customerNameInput.removeEventListener('keypress', handleKeyPress);
+        customerPhoneInput.removeEventListener('keypress', handleKeyPress); // NOU
+        customerAddressInput.removeEventListener('keypress', handleKeyPress); // NOU (pentru Enter)
     };
 
-    // Adaugă listener-ele
     submitButton.addEventListener('click', handleSubmit);
     cancelButton.addEventListener('click', handleCancel);
-    closeButton.addEventListener('click', handleCancel); // "X" face la fel ca Anulează
+    closeButton.addEventListener('click', handleCancel);
 
-    // Închide modala dacă se apasă ESC
     const handleKeyPress = (event) => {
         if (event.key === 'Escape') {
             handleCancel();
         } else if (event.key === 'Enter') {
-            handleSubmit();
+            // Dacă Enter este apăsat pe un câmp de input, se încearcă submit
+            if (document.activeElement === customerNameInput || document.activeElement === customerPhoneInput || document.activeElement === customerAddressInput) {
+                handleSubmit();
+            }
         }
     };
     customerNameInput.addEventListener('keypress', handleKeyPress);
+    customerPhoneInput.addEventListener('keypress', handleKeyPress);
+    customerAddressInput.addEventListener('keypress', handleKeyPress);
 
 
-    // Închide modala dacă se dă click în afara ei
     const clickOutsideOrderPrompt = (event) => {
         if (event.target === modal) {
             handleCancel();
@@ -179,216 +173,212 @@ function showOrderPrompt() {
     window.addEventListener('click', clickOutsideOrderPrompt);
 }
 
-// 3. Funcție pentru a adăuga un produs în coș
-function addToCart(productId, productName, productPrice) {
-    let cart = getCart(); // Obține coșul curent (poate fi gol sau cu produse)
+// Funcție pentru a adăuga un produs în coș
+function addToCart(product) { // Acum primește obiectul product direct
+    let cart = getCart();
 
-    let found = false; // Un flag pentru a verifica dacă produsul există deja în coș
-
-    // Iterăm prin fiecare produs din coșul curent
+    let found = false;
     for (let i = 0; i < cart.length; i++) {
-        if (cart[i].id === productId) { // Dacă găsim produsul cu același ID
-            cart[i].quantity++; // Creștem doar cantitatea produsului existent
-            found = true; // Setăm flag-ul la true
-            break; // Oprim bucla, nu mai căutăm
+        if (cart[i].id === product.id) {
+            cart[i].quantity++;
+            found = true;
+            break;
         }
     }
 
-    // Dacă produsul nu a fost găsit în coș (este un produs nou)
     if (!found) {
-        cart.push({ // Adăugăm un nou obiect (produs) în array-ul 'cart'
-            id: productId,       // ID-ul unic al produsului
-            name: productName,   // Numele produsului
-            price: productPrice, // Prețul produsului
-            quantity: 1          // Setăm cantitatea inițială la 1
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image, // Asigură-te că imaginea este inclusă
+            quantity: 1
         });
     }
 
-    saveCart(cart); // Salvăm coșul actualizat în Local Storage
-    updateCartDisplay(); // Apelăm funcția care actualizează vizual coșul (o vom scrie mai jos)
-    updateCartItemCount(); // Apelăm funcția care actualizează contorul din header (o vom scrie mai jos)
-    showAlert(`${productName} a fost adăugat în coș!`); // Un mesaj rapid de confirmare pentru utilizator
+    saveCart(cart);
+    updateCartDisplay();
+    updateCartItemCount();
+    showAlert(`${product.name} a fost adăugat în coș!`);
 }
 
-// 4. Funcție pentru a elimina un produs complet din coș (sau a-i reduce cantitatea)
-// Deocamdată, o facem să elimine complet produsul din coș.
+// Funcție pentru a elimina un produs complet din coș
 function removeFromCart(productId) {
-    let cart = getCart(); // Obține coșul curent
-
-    // Folosim metoda 'filter()' a array-urilor. Aceasta creează un NOU array
-    // care conține doar elementele pentru care funcția de callback returnează 'true'.
-    // Aici, păstrăm doar acele elemente unde 'item.id' NU este egal cu 'productId'
-    // (adică toate produsele, în afară de cel pe care vrem să-l ștergem).
+    let cart = getCart();
     cart = cart.filter(item => item.id !== productId);
-
-    saveCart(cart); // Salvăm noul coș (cu produsul șters) în Local Storage
-    updateCartDisplay(); // Actualizăm afișajul vizual al coșului
-    updateCartItemCount(); // Actualizăm contorul din header
+    saveCart(cart);
+    updateCartDisplay();
+    updateCartItemCount();
 }
 
-// 5. Funcție pentru a goli complet coșul
+// Funcție pentru a goli complet coșul
 function clearCart() {
-    // localStorage.removeItem('shoppingCart') șterge complet intrarea de sub cheia 'shoppingCart' din Local Storage.
     localStorage.removeItem('shoppingCart');
-
-    updateCartDisplay(); // Actualizăm afișajul vizual (va arăta coș gol)
-    updateCartItemCount(); // Actualizăm contorul (va arăta 0)
+    updateCartDisplay();
+    updateCartItemCount();
 }
 
-// 6. Funcție pentru a actualiza afișajul vizual al coșului pe pagina cos.html
+// Funcție pentru a actualiza afișajul vizual al coșului pe pagina cos.html
 function updateCartDisplay() {
-    const cart = getCart(); // Obține coșul curent
-    // document.getElementById() este o metodă JavaScript care găsește un element HTML după ID-ul său.
-    const cartItemsContainer = document.getElementById('cart-items'); // Containerul unde vom afișa produsele
-    const cartTotalElement = document.getElementById('cart-total'); // Elementul unde vom afișa totalul
+    const cart = getCart();
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartTotalElement = document.getElementById('cart-total');
 
-    // Verificăm dacă aceste elemente există pe pagina curentă.
-    // Sunt prezente doar pe cos.html, deci nu vrem erori pe index.html sau produse.html
     if (cartItemsContainer) {
-        cartItemsContainer.innerHTML = ''; // Golește conținutul existent în container. Astfel, refacem lista de fiecare dată.
+        cartItemsContainer.innerHTML = '';
 
-        let total = 0; // Inițializăm totalul coșului
+        let total = 0;
 
-        if (cart.length === 0) { // Dacă array-ul 'cart' este gol
-            cartItemsContainer.innerHTML = '<p>Coșul de cumpărături este gol.</p>'; // Afișăm un mesaj
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = '<p>Coșul de cumpărături este gol.</p>';
         } else {
-            // Dacă există produse, iterăm prin fiecare
-            cart.forEach(item => { // 'forEach' este o metodă de array care execută o funcție pentru fiecare element
-                const itemElement = document.createElement('div'); // Creăm un nou element HTML 'div'
-                itemElement.classList.add('cart-item'); // Adăugăm o clasă CSS 'cart-item' pentru stilizare
-                
-                // Setăm conținutul HTML al noului 'div'. Folosim "template literals" (backticks ``)
-                // pentru a insera variabile direct în string (`${variabila}`).
+            cart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('cart-item');
+
                 itemElement.innerHTML = `
-                    <span>${item.name} (x${item.quantity})</span>
+                    <div class="cart-item-details">
+                        <span>${item.name} (x${item.quantity})</span>
+                    </div>
                     <span>${(item.price * item.quantity).toFixed(2)} RON</span>
                     <button class="remove-from-cart-btn" data-product-id="${item.id}">Șterge</button>
                 `;
-                cartItemsContainer.appendChild(itemElement); // Adăugăm noul 'div' ca un copil al containerului '#cart-items'
-                total += item.price * item.quantity; // Adunăm la total
+                cartItemsContainer.appendChild(itemElement);
+                total += item.price * item.quantity;
             });
         }
-        // Actualizăm elementul '#cart-total' cu valoarea totalului calculat
         if (cartTotalElement) {
-            cartTotalElement.textContent = total.toFixed(2); // .toFixed(2) formatează numărul la 2 zecimale
+            cartTotalElement.textContent = total.toFixed(2);
         }
     }
 }
 
-// 7. Funcție pentru a actualiza contorul de produse din header (exemplu: Coș (3))
+// Funcție pentru a actualiza contorul de produse din header
 function updateCartItemCount() {
-    const cart = getCart(); // Obține coșul curent
-    // Reduce metoda: parcurge array-ul și aplică o funcție de "acumulare".
-    // Aici, calculează suma tuturor cantităților produselor din coș.
-    const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0); // 0 este valoarea inițială a sumei
-
-    const cartCountElement = document.getElementById('cart-item-count'); // Găsește elementul <span> din header
+    const cart = getCart();
+    const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const cartCountElement = document.getElementById('cart-item-count');
     if (cartCountElement) {
-        cartCountElement.textContent = itemCount; // Setează textul span-ului la numărul total de produse
+        cartCountElement.textContent = itemCount;
     }
 }
 
-// 8. Event Listener-e: Așteptăm ca documentul HTML să fie complet încărcat
-document.addEventListener('DOMContentLoaded', () => {
-    // document.querySelectorAll('.add-to-cart-btn') găsește TOATE butoanele
-    // care au clasa CSS 'add-to-cart-btn' (cele de pe pagina produse.html).
-    const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+// Funcția pentru a obține toate comenzile din Local Storage
+function getOrders() {
+    return JSON.parse(localStorage.getItem('orders')) || [];
+}
 
-    // Pentru fiecare buton "Adaugă în Coș" găsit
-    addToCartButtons.forEach(button => {
-        // Adăugăm un "event listener" care așteaptă un eveniment de 'click'
-        button.addEventListener('click', (event) => {
-            // 'event.target' este elementul pe care s-a dat click (butonul).
-            // 'dataset' este o proprietate care permite accesarea atributelor 'data-*' din HTML.
-            // Ex: <button data-product-id="1">... se accesează cu event.target.dataset.productId
-            const productId = event.target.dataset.productId;
-            const productName = event.target.dataset.productName;
-            // parseFloat() convertește string-ul prețului într-un număr zecimal.
-            const productPrice = parseFloat(event.target.dataset.productPrice);
+// Funcția pentru a salva comenzile în Local Storage
+function saveOrders(orders) {
+    localStorage.setItem('orders', JSON.stringify(orders));
+}
 
-            addToCart(productId, productName, productPrice); // Apelăm funcția noastră de adăugare în coș
-        });
-    });
+// Funcția pentru simularea plasării comenzii - SALVEAZĂ ÎN LOCAL STORAGE PENTRU ADMIN
+function simulateOrderPlacement(customerName, customerPhone, customerAddress) { // NOU: primește telefon și adresă
+    const cart = getCart();
 
-    // Inițializarea afișajului coșului și a contorului la încărcarea paginii
-    // Acestea se apelează O SINGURĂ DATĂ, când pagina se încarcă,
-    // pentru a afișa starea curentă a coșului din Local Storage.
-    updateCartDisplay();
-    updateCartItemCount();
-});
-
-
-// 9. Event Listener pentru butoanele de "Șterge" din coș (folosim "delegare de evenimente")
-// Punem listener-ul pe întregul document pentru a detecta clicuri pe butoane
-// care ar putea fi adăugate dinamic (JavaScript le creează).
-document.addEventListener('click', (event) => {
-    // 'event.target.classList.contains()' verifică dacă elementul pe care s-a dat click
-    // are clasa CSS 'remove-from-cart-btn'.
-    if (event.target.classList.contains('remove-from-cart-btn')) {
-        const productId = event.target.dataset.productId; // Obținem ID-ul produsului de șters
-        removeFromCart(productId); // Apelăm funcția de ștergere
-    }
-});
-
-// 10. Funcția pentru simularea plasării comenzii
-// Primește acum numele clientului ca parametru
-function simulateOrderPlacement(customerName) {
-    const cart = getCart(); // Obține coșul curent
-
-    if (cart.length === 0) { // Verifică dacă coșul este gol
+    if (cart.length === 0) {
         showAlert("Coșul de cumpărături este gol! Adaugă produse înainte de a plasa o comandă.");
-        return; // Oprește execuția funcției
+        return;
     }
 
-    // ... restul codului funcției rămâne la fel ...
-    // Construim un obiect cu toate detaliile comenzii pentru afișare
     const orderDetails = {
-        id: Date.now().toString(),
-        customer: customerName, // Folosim numele primit ca parametru
+        id: 'ORDER_' + Date.now().toString(), // ID unic pentru comandă
+        customerName: customerName,
+        customerPhone: customerPhone, // NOU
+        customerAddress: customerAddress, // NOU
         items: cart,
         total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-        date: new Date().toLocaleString()
+        date: new Date().toLocaleString(),
+        status: 'În așteptare' // Status inițial al comenzii
     };
 
-    console.log("DETALII COMANDĂ SIMULATĂ:", orderDetails);
+    // Obține comenzile existente, adaugă noua comandă și salvează
+    const orders = getOrders();
+    orders.push(orderDetails);
+    saveOrders(orders); // Salvează comenzile în Local Storage
 
-    showAlert(`Comanda dumneavoastră a fost plasată cu succes, ${customerName}! Veți fi contactat în curând.`);
+    console.log("DETALII COMANDĂ PLASATĂ:", orderDetails);
+    showAlert(`Comanda dumneavoastră a fost plasată cu succes, ${customerName}! Veți fi contactat în curând la ${customerPhone}.`);
 
-    clearCart();
+    clearCart(); // Golește coșul după plasarea comenzii
 }
 
-// js/cart.js (la sfârșitul fișierului, după blocul "DOMContentLoaded")
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    // Inițializarea afișajului coșului și a contorului la încărcarea paginii
+    updateCartDisplay();
+    updateCartItemCount();
 
-// Adaugă event listener pentru butonul "Golește Coșul"
-// Verificăm dacă elementul există înainte de a adăuga listener-ul (pentru a nu avea erori pe alte pagini)
-const clearCartBtn = document.getElementById('clear-cart-btn');
-if (clearCartBtn) {
-    clearCartBtn.addEventListener('click', clearCart); // Când se dă click, apelează funcția clearCart
-}
+    // NOU: Apelăm funcția pentru a afișa produsele pe pagina produse.html (dacă este cazul)
+    // Ne asigurăm că această funcție este apelată doar dacă elementul `products-grid` există
+    // Aceasta presupune că ai deja o funcție `displayProductsOnStorePage` undeva (e.g., în main.js sau chiar aici)
+    const productsGridElement = document.getElementById('products-grid');
+    if (productsGridElement && typeof displayProductsOnStorePage === 'function') {
+        displayProductsOnStorePage();
+    }
 
-// Adaugă event listener pentru butonul "Plasează Comanda"
-const checkoutBtn = document.getElementById('checkout-btn');
-if (checkoutBtn) {
-    checkoutBtn.addEventListener('click', showOrderPrompt); // Acum, click-ul deschide modala
-}
 
-// js/cart.js
+    // Delegare de evenimente pentru butoanele "Adaugă în Coș" de pe pagina de produse
+    // (Presupunând că produsele sunt încărcate dinamic sau că butoanele au data-* atribute)
+    document.body.addEventListener('click', (event) => {
+        const target = event.target;
+        if (target.classList.contains('add-to-cart-btn')) {
+            // Colectează datele produsului de la butoanele data-set
+            const product = {
+                id: target.dataset.productId,
+                name: target.dataset.productName,
+                price: parseFloat(target.dataset.productPrice),
+                image: target.dataset.productImage // Asigură-te că ai acest data-attribute
+            };
+            addToCart(product);
+        }
+    });
 
-// ... (getCart, saveCart, showAlert etc. rămân la fel) ...
+    // Event Listener pentru butoanele de "Șterge" din coș
+    document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('remove-from-cart-btn')) {
+            const productId = event.target.dataset.productId;
+            removeFromCart(productId);
+        }
+    });
 
-// Funcție pentru a afișa produsele pe pagina produse.html
-// Această funcție va prelua produsele din localStorage
+    // Adaugă event listener pentru butonul "Golește Coșul"
+    const clearCartBtn = document.getElementById('clear-cart-btn');
+    if (clearCartBtn) {
+        clearCartBtn.addEventListener('click', () => {
+            showAlert(
+                "Sunteți sigur că doriți să goliți coșul?",
+                "confirm",
+                clearCart,
+                () => showAlert("Golirea coșului a fost anulată.")
+            );
+        });
+    }
+
+    // Adaugă event listener pentru butonul "Plasează Comanda"
+    const checkoutBtn = document.getElementById('checkout-btn');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', showOrderPrompt);
+    }
+});
+
+
+// NOU: Funcție pentru a afișa produsele pe pagina produse.html
+// Este esențial ca această funcție să existe undeva și să fie apelată.
+// Dacă nu ai main.js, o poți pune aici. Ideal ar fi într-un fișier dedicat afișării produselor pe site.
+// Am mutat această funcție din cart.js, dacă vrei să ai o separare mai bună a responsabilităților,
+// dar o las aici pentru compatibilitatea cu codul tău.
 function displayProductsOnStorePage() {
     const productsGridElement = document.getElementById('products-grid');
-    if (!productsGridElement) return; // Ieși dacă nu ești pe pagina produse.html
+    if (!productsGridElement) return;
 
-    productsGridElement.innerHTML = ''; // Golește conținutul existent
+    productsGridElement.innerHTML = '';
 
-    // ATENȚIE: Presupunem că funcția getProducts() este acum definită în admin.js
-    // sau că este globală (dacă o muți în utils.js ulterior).
-    // Pentru a evita o eroare, o vom defini temporar aici sau ne asigurăm că e globală.
-    // CEL MAI BINE e să o muți în utils.js, dar dacă nu vrei utils.js încă, o definim aici:
-    const products = JSON.parse(localStorage.getItem('products')) || [];
+    // ATENȚIE: Aici apelăm getProducts() care ar trebui să fie definită.
+    // Presupunem că e în admin.js sau că o vei face globală.
+    // Pentru a ne asigura că funcționează, o vom defini aici dacă nu e globală.
+    const products = JSON.parse(localStorage.getItem('products')) || []; // Fallback local
 
     if (products.length === 0) {
         productsGridElement.innerHTML = '<p class="empty-cart-message" style="width: 100%; text-align: center;">Momentan nu sunt produse disponibile. Vă rugăm să reveniți mai târziu.</p>';
@@ -412,63 +402,3 @@ function displayProductsOnStorePage() {
         productsGridElement.appendChild(productCard);
     });
 }
-
-// Modifică funcția addToCart pentru a prelua mai multe date
-function addToCart(productId, productName, productPrice, productImage) { // Adaugă productImage
-    let cart = getCart();
-
-    let found = false;
-    for (let i = 0; i < cart.length; i++) {
-        if (cart[i].id === productId) {
-            cart[i].quantity++;
-            found = true;
-            break;
-        }
-    }
-
-    if (!found) {
-        cart.push({
-            id: productId,
-            name: productName,
-            price: productPrice,
-            image: productImage, // Salvează și imaginea în coș
-            quantity: 1
-        });
-    }
-
-    saveCart(cart);
-    updateCartDisplay();
-    updateCartItemCount();
-    showAlert(`${productName} a fost adăugat în coș!`);
-}
-
-// Modifică event listener-ul pentru butoanele "Adaugă în Coș"
-document.addEventListener('DOMContentLoaded', () => {
-    // ... (restul codului existent) ...
-
-    // Inițializarea afișajului coșului și a contorului la încărcarea paginii
-    updateCartDisplay();
-    updateCartItemCount();
-
-    // NOU: Aici apelăm funcția pentru a afișa produsele pe pagina produse.html
-    displayProductsOnStorePage(); // <--- Adaugă această linie
-
-    // Actualizează event listener-ul pentru butoanele de adăugare în coș
-    // Acum le vom face să preia datele din dataset-ul butonului.
-    const productsGrid = document.getElementById('products-grid'); // Preia elementul părinte
-    if (productsGrid) {
-        productsGrid.addEventListener('click', (event) => { // Delegare de evenimente
-            const target = event.target;
-            if (target.classList.contains('add-to-cart-btn')) {
-                const productId = target.dataset.productId;
-                const productName = target.dataset.productName;
-                const productPrice = parseFloat(target.dataset.productPrice);
-                const productImage = target.dataset.productImage; // Preia imaginea
-
-                addToCart(productId, productName, productPrice, productImage); // Trimite și imaginea
-            }
-        });
-    }
-
-    // ... restul event listener-ilor pentru coș, checkout etc.
-});

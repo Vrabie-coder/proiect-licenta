@@ -9,71 +9,79 @@
 </head>
 
 <body>
-<header>
-    <div class="container">
-        <div class="brand"> <a href="index.html">
-                <img src="img/bee-hive.png" alt="Stupina Vrăbiuțelor Logo" class="header-logo"> <span class="site-title">Stupina Vrăbiuțelor</span> </a>
+    <header>
+        <div class="container">
+            <div class="brand">
+                <a href="index.html">
+                    <img src="img/bee-hive.png" alt="Stupina Vrăbiuțelor Logo" class="header-logo">
+                    <span class="site-title">Stupina Vrăbiuțelor</span>
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Acasă</a></li>
+                    <li><a href="produse.html">Produse</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="cos.html">Coș (<span id="cart-item-count">0</span>)</a></li>
+                    <li id="admin-link-container"></li>
+                </ul>
+            </nav>
         </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Acasă</a></li>
-                <li><a href="produse.html">Produse</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="cos.html">Coș (<span id="cart-item-count">0</span>)</a></li>
-            </ul>
-        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <h2>Coșul Tău de Cumpărături</h2>
+            <div id="cart-items" class="cart-items-container">
+                <p>Coșul de cumpărături este gol.</p>
+            </div>
+            <div class="cart-summary">
+                <h3>Total Coș: <span id="cart-total">0.00</span> RON</h3>
+                <button id="clear-cart-btn" class="btn-secondary">Golește Coșul</button>
+                <button id="checkout-btn" class="btn-primary">Plasează Comanda</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Miere Naturală. Toate drepturile rezervate.</p>
+        </div>
+    </footer>
+
+    <div id="custom-alert-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <p id="alert-message"></p>
+            <button class="btn-primary" id="alert-ok-button">OK</button>
+            <button class="btn-secondary" id="alert-cancel-button" style="display: none;">Anulează</button>
+        </div>
     </div>
-</header>
 
-<main>
-    <div class="container">
-        <h2>Coșul Tău de Cumpărături</h2>
-<div id="cart-items" class="cart-items-container">
-    <p>Coșul de cumpărături este gol.</p>
-</div>
-<div class="cart-summary">
-    <h3>Total Coș: <span id="cart-total">0.00</span> RON</h3>
-    <button id="clear-cart-btn" class="btn-secondary">Golește Coșul</button>
-    <button id="checkout-btn" class="btn-primary">Plasează Comanda</button>
-</div>
+    <div id="order-prompt-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="order-prompt-close">&times;</span>
+            <h3>Finalizează Comanda</h3>
+            <div class="form-group">
+                <label for="customer-name-input">Nume complet:</label>
+                <input type="text" id="customer-name-input" placeholder="Ex: Popescu Ion" required>
+            </div>
+            <div class="form-group">
+                <label for="customer-phone-input">Telefon:</label>
+                <input type="tel" id="customer-phone-input" placeholder="Ex: 0712345678" required>
+            </div>
+            <div class="form-group">
+                <label for="customer-address-input">Adresă livrare:</label>
+                <textarea id="customer-address-input" placeholder="Ex: Str. Principală, Nr. 10, Ap. 5, Oraș, Județ" rows="3" required></textarea>
+            </div>
+            <button class="btn-primary" id="order-prompt-submit">Plasează Comanda</button>
+            <button class="btn-secondary" id="order-prompt-cancel">Anulează</button>
+            <p id="order-prompt-error" class="error-message"></p>
+        </div>
     </div>
-</main>
 
-<footer>
-    <div class="container">
-        <p>&copy; 2025 Miere Naturală. Toate drepturile rezervate.</p>
-    </div>
-</footer>
-
-<script src="js/cart.js"></script>
-<script src="js/admin.js"></script> ```
-
-<div id="custom-alert-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <p id="alert-message"></p>
-        <button class="btn-primary" id="alert-ok-button">OK</button>
-        <button class="btn-secondary" id="alert-cancel-button" style="display: none;">Anulează</button> </div>
-</div>
-
-<div id="custom-alert-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <p id="alert-message"></p>
-        <button class="btn-primary" id="alert-ok-button">OK</button>
-    </div>
-</div>
-<div id="order-prompt-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-button" id="order-prompt-close">&times;</span>
-        <p>Introduceți numele dumneavoastră pentru comandă:</p>
-        <input type="text" id="customer-name-input" placeholder="Nume complet" required>
-        <button class="btn-primary" id="order-prompt-submit">Plasează Comanda</button>
-        <button class="btn-secondary" id="order-prompt-cancel">Anulează</button>
-        <p id="order-prompt-error" class="error-message"></p>
-    </div>
-</div>
-
+    <script src="js/cart.js"></script>
+    <script src="js/admin.js"></script>
 </body>
 
 </html>
