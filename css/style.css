@@ -184,6 +184,15 @@ main {
     margin-bottom: 10px;
 }
 
+/* Stiluri pentru Pagina Produse */
+.products-section h2 {
+    text-align: center;
+    font-size: 2em;
+    color: #333;
+    margin-top: 0; /* Elimină spațiul implicit de sus al h2 */
+    margin-bottom: 20px; /* Setează un spațiu controlat sub titlu (ajustează dacă vrei mai puțin) */
+}
+
 /* Stiluri pentru grila de produse (Pagina Produse) */
 .products-grid {
     display: grid;
@@ -296,83 +305,6 @@ footer {
     text-align: center;
     padding: 1rem 0;
     margin-top: 20px; /* Spațiu deasupra footer-ului */
-}
-
-/* Media Queries pentru Responsivitate */
-@media (max-width: 992px) { /* Tabletă */
-    .container {
-        width: 90%;
-    }
-    .hero-section h2 {
-        font-size: 2em;
-    }
-    .site-title {
-        font-size: 2em;
-    }
-    .header-logo {
-        height: 50px;
-    }
-}
-
-@media (max-width: 768px) { /* Telefoane și tablete mici */
-    .container {
-        width: 95%;
-    }
-
-    header .container {
-        flex-direction: column; /* Pe mobil, punem logo-ul/titlul deasupra navigației */
-        text-align: center;
-    }
-
-    .brand {
-        margin-bottom: 15px; /* Spațiu sub logo/titlu */
-        flex-direction: column; /* Logo și titlu text pe verticală */
-        gap: 5px; /* Spațiu mai mic */
-    }
-
-    .site-title {
-        font-size: 1.8em; /* Reducem mărimea fontului pentru titlu pe mobil */
-    }
-
-    .header-logo {
-        height: 45px; /* Reducem mărimea logo-ului pe mobil */
-    }
-
-    header nav ul {
-        margin-top: 10px;
-    }
-
-    header nav ul li {
-        padding: 0 8px; /* Spațiu mai mic între elementele navigației pe mobil */
-    }
-
-    .hero-section h2 {
-        font-size: 1.8em;
-    }
-
-    .btn-primary {
-        padding: 10px 20px;
-    }
-
-    .products-grid {
-        grid-template-columns: 1fr; /* O singură coloană pe mobil pentru carduri */
-    }
-}
-
-@media (max-width: 480px) { /* Telefoane foarte mici */
-    .site-title {
-        font-size: 1.5em;
-    }
-    .header-logo {
-        height: 40px;
-    }
-    /* Poți face elementele de navigare să stea pe o singură coloană dacă e foarte îngust */
-    /*
-    header nav ul li {
-        display: block;
-        margin: 5px 0;
-    }
-    */
 }
 
 /* Stiluri pentru Pop-up-uri (Modale) */
@@ -623,19 +555,6 @@ footer {
     flex-grow: 1; /* Butoanele ocupa spatiul disponibil */
 }
 
-/* Ajustare media query pentru admin panel */
-@media (max-width: 768px) {
-    .admin-controls {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .admin-controls .btn-primary,
-    .admin-controls .btn-secondary {
-        width: 80%; /* Butoanele admin ocupa mai multa latime pe mobil */
-    }
-}
-
 /* Stiluri pentru Hero Slider */
 .hero-slider {
     width: 100%;
@@ -755,54 +674,4 @@ footer {
 .dot.active {
     background-color: #fff;
     transform: scale(1.2);
-}
-
-/* Responsivitate pentru slider */
-@media (max-width: 768px) {
-    .slide {
-        height: 350px; /* Înălțime mai mică pe mobil */
-    }
-
-    .slide-content h1 {
-        font-size: 1.8em;
-    }
-
-    .slide-content p {
-        font-size: 1em;
-    }
-
-    .slider-btn {
-        padding: 10px;
-        font-size: 1.5em;
-        width: 40px;
-        height: 40px;
-    }
-
-    .slider-btn.prev {
-        left: 10px;
-    }
-
-    .slider-btn.next {
-        right: 10px;
-    }
-
-    .dot {
-        width: 10px;
-        height: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .slide {
-        height: 300px;
-    }
-    .slide-content {
-        padding: 15px 20px;
-    }
-    .slide-content h1 {
-        font-size: 1.5em;
-    }
-    .slide-content p {
-        font-size: 0.9em;
-    }
 }
