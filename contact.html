@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    
+
 <head>
     <link rel="stylesheet" href="css/style.css">
     <meta charset="UTF-8">
@@ -9,46 +9,82 @@
 </head>
 
 <body>
-<header>
-    <div class="container">
-        <div class="brand"> <a href="index.html">
-                <img src="img/bee-hive.png" alt="Stupina Vrăbiuțelor Logo" class="header-logo"> <span class="site-title">Stupina Vrăbiuțelor</span> </a>
+    <header>
+        <div class="container">
+            <div class="brand">
+                <a href="index.html">
+                    <img src="img/bee-hive.png" alt="Stupina Vrăbiuțelor Logo" class="header-logo">
+                    <span class="site-title">Stupina Vrăbiuțelor</span>
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Acasă</a></li>
+                    <li><a href="produse.html">Produse</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="cos.html">Coș (<span id="cart-item-count">0</span>)</a></li>
+                    <li id="admin-link-container"></li>
+                </ul>
+            </nav>
         </div>
-        <nav>
-            <ul>
-            <li><a href="index.html">Acasă</a></li>
-            <li><a href="produse.html">Produse</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="cos.html">Coș (<span id="cart-item-count">0</span>)</a></li>
-            <li id="admin-link-container"></li> </ul>
-        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="contact-info">
+                <h2>Contactați-ne</h2>
+                <p>Ne puteți contacta la următoarele adrese și numere de telefon:</p>
+                <p><strong>Adresă:</strong> Strada Florilor, Nr. 10, Galați, România</p>
+                <p><strong>Telefon:</strong> +40 7xy zzzz zzz</p>
+                <p><strong>Email:</strong> contact@stupinavrabiuțelor.ro</p>
+                <p>Suntem disponibili de Luni până Vineri, între orele 9:00 - 17:00.</p>
+            </section>
+
+            <div class="map-container">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2777.6715694762747!2d28.00067661556947!3d45.43859797910006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40b615c82c3c1e2f%3A0x6a2c2e0b5c1c1a1c!2sStrada%20Florilor%2010%2C%20Gala%C8%9Bi%20800160!5e0!3m2!1sen!2sro!4v1678912345678!5m2!1sen!2sro"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Miere Naturală. Toate drepturile rezervate.</p>
+        </div>
+    </footer>
+
+    <script src="js/cart.js"></script>
+    <script src="js/admin.js"></script>
+
+    <div id="custom-alert-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <p id="alert-message"></p>
+            <button class="btn-primary" id="alert-ok-button">OK</button>
+            <button class="btn-secondary" id="alert-cancel-button" style="display: none;">Anulează</button>
+        </div>
     </div>
-</header>
 
-<main>
-    <div class="container">
-        <h2>Bun venit în lumea mierii pure!</h2>
-        <p>Descoperă miere naturală, direct de la stup.</p>
-    </div>
-</main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Actualizează numărul de iteme din coș
+            if (typeof updateCartItemCount === 'function') {
+                updateCartItemCount();
+            } else {
+                console.warn("Funcția updateCartItemCount nu este disponibilă.");
+            }
 
-<footer>
-    <div class="container">
-        <p>&copy; 2025 Miere Naturală. Toate drepturile rezervate.</p>
-    </div>
-</footer>
-
-<script src="js/cart.js"></script>
-<script src="js/admin.js"></script> ```
-
-<div id="custom-alert-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <p id="alert-message"></p>
-        <button class="btn-primary" id="alert-ok-button">OK</button>
-        <button class="btn-secondary" id="alert-cancel-button" style="display: none;">Anulează</button> </div>
-</div>
-
+            // Actualizează link-ul de administrare
+            if (typeof updateAdminLink === 'function') {
+                updateAdminLink();
+            } else {
+                console.warn("Funcția updateAdminLink nu este disponibilă.");
+            }
+        });
+    </script>
 </body>
 
 </html>

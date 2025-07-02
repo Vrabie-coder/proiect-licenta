@@ -12,6 +12,11 @@ body {
     line-height: 1.6;
     background-color: #f8f8f8; /* Un gri foarte deschis */
     color: #333;
+
+    /* Stiluri pentru sticky footer */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Asigură că body-ul ocupă cel puțin toată înălțimea vizibilă */
 }
 
 .container {
@@ -88,7 +93,7 @@ header nav a:hover {
 /* Stiluri Main content */
 main {
     padding: 20px 0;
-    min-height: 60vh; /* Asigură că main ocupă suficient spațiu */
+    flex-grow: 1; /* Permite main-ului să crească și să ocupe spațiul liber */
 }
 
 /* --- Stiluri de bază pentru butoane (Mutate aici pentru consistență) --- */
