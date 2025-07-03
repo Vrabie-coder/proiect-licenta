@@ -61,13 +61,11 @@
     <script src="js/admin.js"></script>
 
     <script>
-        // Acest script inline va rula după ce cart.js și admin.js sunt încărcate
+        //rulează după ce cart.js si admin.js sunt încărcate
         document.addEventListener('DOMContentLoaded', () => {
-            // Asigură-te că ID-ul de aici se potrivește cu cel din admin.js
             const productListElement = document.getElementById('products-grid'); 
 
             if (productListElement) {
-                // Asigură-te că initializeDefaultProductsIfEmpty și displayProductsOnFrontend sunt disponibile
                 if (typeof initializeDefaultProductsIfEmpty === 'function' && typeof displayProductsOnFrontend === 'function') {
                     initializeDefaultProductsIfEmpty();
                     displayProductsOnFrontend();

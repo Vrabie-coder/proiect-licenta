@@ -1,6 +1,3 @@
-/* style.css */
-
-/* Reset CSS de bază */
 * {
     margin: 0;
     padding: 0;
@@ -10,67 +7,68 @@
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    background-color: #f8f8f8; /* Un gri foarte deschis */
+    background-color: #f8f8f8;
     color: #333;
 
-    /* Stiluri pentru sticky footer */
+    /*sticky footer*/
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Asigură că body-ul ocupă cel puțin toată înălțimea vizibilă */
+    min-height: 100vh;
 }
 
 .container {
-    width: 80%; /* Lățimea conținutului */
-    max-width: 1200px; /* Limitează lățimea maximă */
-    margin: auto; /* Centrează conținutul */
-    overflow: hidden; /* Clearfix pentru float-uri vechi, dar bun și pentru flexbox */
+    width: 80%; 
+    max-width: 1200px;
+    margin: auto;
+    overflow: hidden;
 }
 
-/* Stiluri Header */
+/*Header*/
 header {
-    background-color: #f0a000; /* Culoare caldă de miere */
+    background-color: #f0a000;
     color: white;
     padding: 1rem 0;
     border-bottom: 3px solid #d48e00;
 }
 
-header .container { /* Aplicăm flexbox pe containerul din header */
+header .container {
     display: flex;
-    justify-content: space-between; /* Împinge brand-ul și navigația la capete opuse */
-    align-items: center; /* Centrează vertical elementele */
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* Stiluri pentru zona de brand (logo + titlu text) */
+/*Zona de brand*/
 .brand {
-    display: flex; /* Folosim flexbox pentru a alinia logo-ul și titlul */
-    align-items: center; /* Centrează vertical elementele din brand */
-    gap: 10px; /* Spațiu între logo și titlu text */
-}
-
-.brand a { /* Asigură că link-ul nu strică alinierea și că textul este alb */
     display: flex;
     align-items: center;
-    text-decoration: none; /* Elimină sublinierea de pe link */
-    color: white; /* Asigură că textul rămâne alb */
+    gap: 10px;
 }
 
-.header-logo { /* Stiluri pentru imaginea logo-ului */
-    height: 60px; /* Ajustează înălțimea logo-ului. Poți încerca și 70px sau 50px */
-    width: auto; /* Păstrează raportul de aspect */
+.brand a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white;
 }
 
-.site-title { /* Stiluri pentru textul "Stupina Vrăbiuțelor" */
-    color: white; /* Culoarea textului (alb) */
-    font-size: 2.2em; /* Mărimea fontului pentru titlu. Ajustează după preferință */
+/* Logo */
+.header-logo {
+    height: 60px;
+    width: auto;
+}
+
+.site-title {
+    color: white;
+    font-size: 2.2em;
     font-weight: bold;
-    white-space: nowrap; /* Previne ruperea textului pe mai multe rânduri */
+    white-space: nowrap;
 }
 
 /* Stiluri Navigație */
 header nav ul {
     list-style: none;
     padding: 0;
-    margin: 0; /* Asigură că nu există margini implicite */
+    margin: 0;
 }
 
 header nav ul li {
@@ -83,63 +81,59 @@ header nav a {
     text-decoration: none;
     text-transform: uppercase;
     font-weight: bold;
-    transition: color 0.3s ease; /* Efect de tranziție la hover */
+    transition: color 0.3s ease;
 }
 
 header nav a:hover {
-    color: #ddd; /* Culoare mai deschisă la hover */
+    color: #ddd;
 }
 
-/* Stiluri Main content */
 main {
     padding: 20px 0;
-    flex-grow: 1; /* Permite main-ului să crească și să ocupe spațiul liber */
+    flex-grow: 1;
 }
 
-/* --- Stiluri de bază pentru butoane (Mutate aici pentru consistență) --- */
+/*Stiluri de bază pentru butoane*/
 .btn-primary {
-    background-color: #f7b731; /* Culoarea primară (galben-portocaliu) */
+    background-color: #f7b731;
     color: white;
     padding: 12px 25px;
-    border: none; /* Crucial pentru a elimina bordura implicită */
-    border-radius: 5px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-decoration: none; /* În cazul în care este folosit pe <a> */
-    display: inline-block; /* Pentru padding și margin corecte */
-    font-weight: bold; /* Adăugat pentru a se potrivi cu butonul original de pe home */
-}
-
-.btn-primary:hover {
-    background-color: #e6a720; /* O nuanță puțin mai închisă la hover */
-}
-
-.btn-secondary {
-    background-color: #6c757d; /* Culoare gri, pentru acțiuni secundare */
-    color: white;
-    padding: 12px 25px;
-    border: none; /* Crucial pentru a elimina bordura implicită */
+    border: none;
     border-radius: 5px;
     font-size: 1em;
     cursor: pointer;
     transition: background-color 0.3s ease;
     text-decoration: none;
     display: inline-block;
-    font-weight: bold; /* Adăugat pentru consistență */
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background-color: #e6a720;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: bold;
 }
 
 .btn-secondary:hover {
     background-color: #5a6268;
 }
-/* ------------------------------------------------------------------ */
 
-
-/* Stiluri pentru Hero Section (Acasă) */
 .hero-section {
     text-align: center;
     margin-bottom: 40px;
-    padding: 20px; /* Adaugă puțin padding */
+    padding: 20px;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
@@ -150,7 +144,7 @@ main {
     height: auto;
     border-radius: 10px;
     margin-bottom: 20px;
-    object-fit: cover; /* Asigură că imaginea acoperă spațiul fără a se deforma */
+    object-fit: cover;
 }
 
 .hero-section h2 {
@@ -164,10 +158,7 @@ main {
     margin-bottom: 25px;
 }
 
-/* Vechea definiție a .btn-primary a fost MUTATĂ și ȘTEARSĂ de aici */
-
-
-/* Stiluri pentru Features Section (Acasă) */
+/*Stiluri pentru Features Section*/
 .features-section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -189,22 +180,22 @@ main {
     margin-bottom: 10px;
 }
 
-/* Stiluri pentru Pagina Produse */
+/*Stiluri pentru Pagina Produse */
 .products-section h2 {
     text-align: center;
     font-size: 2em;
     color: #333;
-    margin-top: 0; /* Elimină spațiul implicit de sus al h2 */
-    margin-bottom: 20px; /* Setează un spațiu controlat sub titlu (ajustează dacă vrei mai puțin) */
+    margin-top: 0;
+    margin-bottom: 20px;
 }
 
-/* Stiluri pentru grila de produse (Pagina Produse) */
+/*Stiluri pentru grila de produse */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* 3 coloane pe desktop, se ajustează pentru mobil */
-    gap: 25px; /* Spațiu între carduri */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
     padding: 20px 0;
-    margin-top: 20px; /* Spațiu deasupra grilei */
+    margin-top: 20px;
 }
 
 .product-card {
@@ -214,18 +205,18 @@ main {
     padding: 15px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    display: flex; /* Pentru a aranja conținutul în card */
+    display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Împinge conținutul spre margini */
+    justify-content: space-between;
 }
 
 .product-card img {
     max-width: 100%;
-    height: auto; /* Asigură că imaginea își păstrează proporțiile */
-    max-height: 200px; /* Limitează înălțimea imaginilor din card */
+    height: auto;
+    max-height: 200px;
     border-radius: 5px;
     margin-bottom: 10px;
-    object-fit: cover; /* Asigură că imaginea umple spațiul fără a se deforma */
+    object-fit: cover;
 }
 
 .product-card h3 {
@@ -237,7 +228,7 @@ main {
 .product-card p {
     font-size: 0.9em;
     margin-bottom: 15px;
-    flex-grow: 1; /* Permite paragrafului să ocupe spațiu disponibil */
+    flex-grow: 1;
 }
 
 .product-card .price {
@@ -247,11 +238,6 @@ main {
     margin-bottom: 15px;
 }
 
-/* Acest stil se aplică butoanelor din cardurile de produs.
-   Dacă vrei ca aceste butoane să fie identice cu .btn-primary,
-   atunci șterge acest bloc și adaugă class="btn-primary" în HTML-ul lor.
-   Am lăsat așa cum era pentru că ai fost mulțumit de aspectul lor inițial.
-*/
 .product-card button {
     background-color: #f0a000;
     color: white;
@@ -267,7 +253,7 @@ main {
     background-color: #d48e00;
 }
 
-/* Stiluri pentru Pagina Contact */
+/*Stiluri pentru Pagina Contact */
 .contact-info {
     margin-top: 20px;
     line-height: 1.8;
@@ -285,10 +271,10 @@ main {
 .map-container {
     margin-top: 30px;
     overflow: hidden;
-    padding-bottom: 56.25%; /* Raport de aspect 16:9 pentru hărți responsive */
+    padding-bottom: 56.25%;
     position: relative;
     height: 0;
-    background-color: white; /* Fundal alb pentru containerul hărții */
+    background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
@@ -299,99 +285,98 @@ main {
     height: 100%;
     width: 100%;
     position: absolute;
-    border: 0; /* Elimină bordura default a iframe-ului */
-    border-radius: 8px; /* Aplică border-radius și iframe-ului */
+    border: 0;
+    border-radius: 8px;
 }
 
-/* Stiluri Footer */
+/*Stiluri Footer */
 footer {
     background-color: #333;
     color: white;
     text-align: center;
     padding: 1rem 0;
-    margin-top: 20px; /* Spațiu deasupra footer-ului */
+    margin-top: 20px;
 }
 
-/* Stiluri pentru Pop-up-uri (Modale) */
+/*Stiluri pentru Pop-up-uri */
 .modal {
-    display: none; /* Ascuns implicit la încărcarea paginii */
-    position: fixed; /* Rămâne fix pe ecran chiar dacă utilizatorul derulează */
-    z-index: 1000; /* Asigură că este deasupra tuturor celorlalte elemente de pe pagină */
+    display: none;
+    position: fixed;
+    z-index: 1000;
     left: 0;
     top: 0;
-    width: 100%; /* Acoperă toată lățimea ferestrei browserului */
-    height: 100%; /* Acoperă toată înălțimea ferestrei browserului */
-    overflow: auto; /* Permite derularea conținutului modalei dacă este prea mare */
-    background-color: rgba(0,0,0,0.4); /* Fundal semi-transparent (negru cu transparență de 40%) */
-    backdrop-filter: blur(5px); /* Aplică un efect de blur pe fundalul din spatele modalei */
-    -webkit-backdrop-filter: blur(5px); /* Pentru compatibilitate cu browserul Safari */
-    justify-content: center; /* Centrează conținutul orizontal */
-    align-items: center; /* Centrează conținutul vertical */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
 }
 
-/* Clasa care va fi adăugată dinamic cu JavaScript pentru a afișa modala */
 .modal.show {
-    display: flex; /* Schimbă display-ul la flex pentru a face modala vizibilă */
+    display: flex;
 }
 
 .modal-content {
-    background-color: white; /* Fundalul casetei pop-up */
-    margin: auto; /* Ajută la centrare (flexbox deja o face, dar e o bună practică) */
-    padding: 30px; /* Spațiere interioară */
-    border: 1px solid #888; /* Bordură subțire */
-    width: 90%; /* Lățime inițială a conținutului */
-    max-width: 450px; /* Lățime maximă pentru a nu fi prea lat pe desktop */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Umbră subtilă pentru un efect 3D */
-    border-radius: 10px; /* Colțuri rotunjite */
-    position: relative; /* Necesar pentru a poziționa butonul de închidere absolut */
-    text-align: center; /* Centrează textul din modală */
-    animation: fadeInScale 0.3s ease-out; /* Aplică animația de apariție */
+    background-color: white;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    position: relative;
+    text-align: center;
+    animation: fadeInScale 0.3s ease-out;
 }
 
 .close-button {
-    color: #aaa; /* Culoarea inițială a "X"-ului */
-    float: right; /* Flotează la dreapta pentru a apărea în colț */
-    font-size: 28px; /* Mărimea fontului pentru "X" */
-    font-weight: bold; /* Face "X"-ul mai gros */
-    cursor: pointer; /* Schimbă cursorul la o mână pentru a indica că e clicabil */
-    position: absolute; /* Poziție absolută față de .modal-content */
-    top: 10px; /* 10px de sus */
-    right: 15px; /* 15px de dreapta */
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer; 
+    position: absolute; 
+    top: 10px;
+    right: 15px;
 }
 
 .close-button:hover,
 .close-button:focus {
-    color: #333; /* Culoare mai închisă la hover/focus */
-    text-decoration: none; /* Asigură că nu are subliniere */
+    color: #333;
+    text-decoration: none;
 }
 
 #alert-message {
-    font-size: 1.2em; /* Mărimea fontului pentru mesajul de alertă */
-    margin-bottom: 25px; /* Spațiu sub mesaj */
-    color: #333; /* Culoarea textului mesajului */
-    font-weight: 500; /* Greutatea fontului */
+    font-size: 1.2em;
+    margin-bottom: 25px;
+    color: #333;
+    font-weight: 500;
 }
 
 #alert-ok-button {
-    padding: 10px 30px; /* Padding pentru butonul "OK" */
-    font-size: 1em; /* Mărimea fontului */
+    padding: 10px 30px;
+    font-size: 1em;
 }
 
-/* Animație CSS pentru apariția modalei */
+/*Animație CSS pentru apariția modalei */
 @keyframes fadeInScale {
-    from { /* Starea inițială a animației */
-        opacity: 0; /* Complet transparent */
-        transform: scale(0.9); /* Micșorat la 90% din dimensiunea normală */
+    from {
+        opacity: 0;
+        transform: scale(0.9);
     }
-    to { /* Starea finală a animației */
-        opacity: 1; /* Complet vizibil */
-        transform: scale(1); /* Dimensiunea normală */
+    to { 
+        opacity: 1;
+        transform: scale(1); 
     }
 }
 
-/* Stiluri specifice pentru Modala de Comandă */
+/*Stiluri specifice pentru Modala de Comandă */
 #order-prompt-modal .modal-content {
-    max-width: 500px; /* Poate fi puțin mai lată decât alerta, pentru input */
+    max-width: 500px;
     padding: 35px;
 }
 
@@ -401,7 +386,7 @@ footer {
 }
 
 #customer-name-input {
-    width: calc(100% - 20px); /* Ocupă aproape toată lățimea, cu padding */
+    width: calc(100% - 20px);
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #ddd;
@@ -409,29 +394,25 @@ footer {
     font-size: 1em;
 }
 
-/* Butoanele din modala de comanda */
+/*Butoanele din modala de comanda */
 #order-prompt-submit {
-    margin-right: 10px; /* Spațiu între butoane */
-}
-
-#order-prompt-cancel {
-    /* Nu mai este nevoie de reguli specifice aici, clasa btn-secondary ar trebui să fie suficientă */
+    margin-right: 10px; 
 }
 
 #order-prompt-error {
     margin-top: 15px;
-    color: #dc3545; /* Roșu pentru erori */
+    color: #dc3545; 
     font-weight: bold;
 }
 
-/* Stiluri pentru Pagina de Login și Panoul de Administrare */
+/*Stiluri pentru Pagina de Login și Panoul de Administrare */
 .login-section, .admin-panel {
     background-color: white;
     padding: 40px;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     max-width: 600px;
-    margin: 40px auto; /* Centrează pe pagină */
+    margin: 40px auto;
     text-align: center;
 }
 
@@ -443,7 +424,7 @@ footer {
 
 .form-group {
     margin-bottom: 20px;
-    text-align: left; /* Aliniază label-urile la stânga */
+    text-align: left;
 }
 
 .form-group label {
@@ -458,35 +439,35 @@ footer {
 .form-group input[type="number"],
 .form-group input[type="url"],
 .form-group textarea {
-    width: calc(100% - 22px); /* Lățime completă minus padding și border */
+    width: calc(100% - 22px);
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 1em;
-    box-sizing: border-box; /* Include padding și border în lățime */
+    box-sizing: border-box;
 }
 
 .form-group textarea {
-    resize: vertical; /* Permite redimensionarea pe verticală */
+    resize: vertical; 
     min-height: 80px;
 }
 
 .login-section .btn-primary {
-    width: 100%; /* Butonul de login ocupă toată lățimea */
+    width: 100%;
     padding: 15px;
     margin-top: 10px;
 }
 
 .error-message {
-    color: #dc3545; /* Roșu pentru mesaje de eroare */
+    color: #dc3545; 
     margin-top: 15px;
     font-weight: bold;
 }
 
-/* Stiluri pentru Admin Panel */
+/*Stiluri pentru Admin Panel */
 .admin-controls {
     display: flex;
-    flex-wrap: wrap; /* Permite butoanelor să treacă pe rândul următor */
+    flex-wrap: wrap;
     gap: 15px;
     margin-bottom: 40px;
     justify-content: center;
@@ -499,12 +480,6 @@ footer {
     text-align: left;
 }
 
-/* Ajustăm grila de produse pentru admin panel dacă e nevoie */
-#product-list-admin {
-    /* Aici poți adăuga stiluri specifice dacă vrei să difere de .products-grid din produse.html */
-}
-
-/* Stiluri pentru cardul de produs în admin (când le vom adăuga) */
 .admin-product-card {
     background-color: #f9f9f9;
     border: 1px solid #eee;
@@ -514,13 +489,13 @@ footer {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: center; /* Centrează conținutul */
+    align-items: center;
     text-align: center;
 }
 
 .admin-product-card img {
     max-width: 100%;
-    height: 150px; /* Inaltime fixa pentru imagini in admin */
+    height: 150px; 
     object-fit: cover;
     border-radius: 5px;
     margin-bottom: 10px;
@@ -557,55 +532,55 @@ footer {
 .admin-product-card .admin-actions .btn-secondary {
     padding: 8px 15px;
     font-size: 0.9em;
-    flex-grow: 1; /* Butoanele ocupa spatiul disponibil */
+    flex-grow: 1;
 }
 
-/* Stiluri pentru Hero Slider */
+/*Stiluri pentru Hero Slider */
 .hero-slider {
     width: 100%;
-    overflow: hidden; /* Ascunde ce depășește containerul */
-    position: relative; /* Pentru poziționarea absolută a conținutului și butoanelor */
-    margin-bottom: 40px; /* Spațiu sub slider */
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 40px;
 }
 
 .slider-container {
     display: flex;
     position: relative;
-    width: 100%; /* Ocupă toată lățimea disponibilă */
+    width: 100%;
 }
 
 .slider-track {
     display: flex;
-    transition: transform 0.5s ease-in-out; /* Tranziție lină pentru schimbarea slide-urilor */
-    width: 100%; /* Important pentru calculul transform */
+    transition: transform 0.5s ease-in-out;
+    width: 100%; 
 }
 
 .slide {
-    min-width: 100%; /* Fiecare slide ocupă 100% din lățimea slider-container */
-    flex-shrink: 0; /* Nu permite slide-urilor să se micșoreze */
+    min-width: 100%;
+    flex-shrink: 0;
     position: relative;
-    height: 450px; /* Înălțimea fixă pentru slide-uri */
-    display: flex; /* Pentru a centra conținutul slide-ului */
-    align-items: center; /* Centrează vertical conținutul */
-    justify-content: center; /* Centrează orizontal conținutul */
+    height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
     text-align: center;
-    color: #fff; /* Culoarea textului pentru conținutul de pe slide */
+    color: #fff; 
 }
 
 .slider-image {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Asigură că imaginea acoperă întregul spațiu fără a se deforma */
+    object-fit: cover; 
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1; /* Asigură că imaginea e sub conținut */
+    z-index: 1;
 }
 
 .slide-content {
-    position: relative; /* Pentru a fi deasupra imaginii */
+    position: relative;
     z-index: 2;
-    background-color: rgba(0, 0, 0, 0.5); /* Suprapunere semi-transparentă pentru lizibilitate */
+    background-color: rgba(0, 0, 0, 0.5);
     padding: 20px 40px;
     border-radius: 8px;
     max-width: 800px;
@@ -623,7 +598,7 @@ footer {
     line-height: 1.6;
 }
 
-/* Butoane de navigație (săgeți) */
+/*Butoane de navigație*/
 .slider-btn {
     position: absolute;
     top: 50%;
@@ -656,7 +631,7 @@ footer {
     right: 20px;
 }
 
-/* Puncte de navigație (dots) */
+/*Puncte de navigație*/
 .slider-dots {
     position: absolute;
     bottom: 20px;

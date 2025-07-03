@@ -70,14 +70,12 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Actualizează numărul de iteme din coș
             if (typeof updateCartItemCount === 'function') {
                 updateCartItemCount();
             } else {
                 console.warn("Funcția updateCartItemCount nu este disponibilă.");
             }
 
-            // Actualizează link-ul de administrare
             if (typeof updateAdminLink === 'function') {
                 updateAdminLink();
             } else {

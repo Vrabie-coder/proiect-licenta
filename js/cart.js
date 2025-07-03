@@ -1,5 +1,3 @@
-// js/cart.js
-
 // 1. Funcție pentru a obține coșul curent din Local Storage
 function getCart() {
     return JSON.parse(localStorage.getItem('shoppingCart')) || [];
@@ -85,8 +83,8 @@ function showAlert(message, type = 'alert', onConfirm = null, onCancel = null) {
 function showOrderPrompt() {
     const modal = document.getElementById('order-prompt-modal');
     const customerNameInput = document.getElementById('customer-name-input');
-    const customerPhoneInput = document.getElementById('customer-phone-input'); // NOU
-    const customerAddressInput = document.getElementById('customer-address-input'); // NOU
+    const customerPhoneInput = document.getElementById('customer-phone-input'); 
+    const customerAddressInput = document.getElementById('customer-address-input'); 
     const submitButton = document.getElementById('order-prompt-submit');
     const cancelButton = document.getElementById('order-prompt-cancel');
     const closeButton = document.getElementById('order-prompt-close');
@@ -99,8 +97,8 @@ function showOrderPrompt() {
 
     // Resetăm starea modalei
     customerNameInput.value = '';
-    customerPhoneInput.value = ''; // Reset NOU
-    customerAddressInput.value = ''; // Reset NOU
+    customerPhoneInput.value = ''; 
+    customerAddressInput.value = ''; 
     errorMessage.textContent = '';
     modal.classList.add('show');
 
@@ -108,25 +106,21 @@ function showOrderPrompt() {
 
     const handleSubmit = () => {
         const customerName = customerNameInput.value.trim();
-        const customerPhone = customerPhoneInput.value.trim(); // NOU
-        const customerAddress = customerAddressInput.value.trim(); // NOU
+        const customerPhone = customerPhoneInput.value.trim(); 
+        const customerAddress = customerAddressInput.value.trim(); 
 
         if (customerName === '' || customerPhone === '' || customerAddress === '') {
             errorMessage.textContent = 'Toate câmpurile sunt obligatorii (Nume, Telefon, Adresă)!';
             return;
         }
 
-        // --- Adaugă această nouă verificare pentru numărul de telefon ---
-        // Folosim o expresie regulată simplă pentru a verifica dacă sunt doar cifre și exact 10
         const phoneRegex = /^\d{10}$/;
         if (!phoneRegex.test(customerPhone)) {
             errorMessage.textContent = 'Numărul de telefon trebuie să conțină exact 10 cifre!';
             return;
         }
-        // -----------------------------------------------------------------
 
         closeOrderPrompt();
-        // Trimitem toate datele colectate funcției de plasare a comenzii
         simulateOrderPlacement(customerName, customerPhone, customerAddress);
     };
 
@@ -142,8 +136,8 @@ function showOrderPrompt() {
         closeButton.removeEventListener('click', handleCancel);
         window.removeEventListener('click', clickOutsideOrderPrompt);
         customerNameInput.removeEventListener('keypress', handleKeyPress);
-        customerPhoneInput.removeEventListener('keypress', handleKeyPress); // NOU
-        customerAddressInput.removeEventListener('keypress', handleKeyPress); // NOU (pentru Enter)
+        customerPhoneInput.removeEventListener('keypress', handleKeyPress); 
+        customerAddressInput.removeEventListener('keypress', handleKeyPress); 
     };
 
     submitButton.addEventListener('click', handleSubmit);
@@ -154,7 +148,6 @@ function showOrderPrompt() {
         if (event.key === 'Escape') {
             handleCancel();
         } else if (event.key === 'Enter') {
-            // Dacă Enter este apăsat pe un câmp de input, se încearcă submit
             if (document.activeElement === customerNameInput || document.activeElement === customerPhoneInput || document.activeElement === customerAddressInput) {
                 handleSubmit();
             }
@@ -174,7 +167,7 @@ function showOrderPrompt() {
 }
 
 // Funcție pentru a adăuga un produs în coș
-function addToCart(product) { // Acum primește obiectul product direct
+function addToCart(product) { 
     let cart = getCart();
 
     let found = false;
@@ -191,7 +184,7 @@ function addToCart(product) { // Acum primește obiectul product direct
             id: product.id,
             name: product.name,
             price: product.price,
-            image: product.image, // Asigură-te că imaginea este inclusă
+            image: product.image, 
             quantity: 1
         });
     }
@@ -274,7 +267,7 @@ function saveOrders(orders) {
 }
 
 // Funcția pentru simularea plasării comenzii - SALVEAZĂ ÎN LOCAL STORAGE PENTRU ADMIN
-function simulateOrderPlacement(customerName, customerPhone, customerAddress) { // NOU: primește telefon și adresă
+function simulateOrderPlacement(customerName, customerPhone, customerAddress) {
     const cart = getCart();
 
     if (cart.length === 0) {
@@ -283,53 +276,44 @@ function simulateOrderPlacement(customerName, customerPhone, customerAddress) { 
     }
 
     const orderDetails = {
-        id: 'ORDER_' + Date.now().toString(), // ID unic pentru comandă
+        id: 'ORDER_' + Date.now().toString(),
         customerName: customerName,
-        customerPhone: customerPhone, // NOU
-        customerAddress: customerAddress, // NOU
+        customerPhone: customerPhone,
+        customerAddress: customerAddress,
         items: cart,
         total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
         date: new Date().toLocaleString(),
-        status: 'În așteptare' // Status inițial al comenzii
+        status: 'În așteptare'
     };
 
     // Obține comenzile existente, adaugă noua comandă și salvează
     const orders = getOrders();
     orders.push(orderDetails);
-    saveOrders(orders); // Salvează comenzile în Local Storage
+    saveOrders(orders);
 
     console.log("DETALII COMANDĂ PLASATĂ:", orderDetails);
     showAlert(`Comanda dumneavoastră a fost plasată cu succes, ${customerName}! Veți fi contactat în curând la ${customerPhone}.`);
 
-    clearCart(); // Golește coșul după plasarea comenzii
+    clearCart();
 }
 
-// Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
-    // Inițializarea afișajului coșului și a contorului la încărcarea paginii
     updateCartDisplay();
     updateCartItemCount();
 
-    // NOU: Apelăm funcția pentru a afișa produsele pe pagina produse.html (dacă este cazul)
-    // Ne asigurăm că această funcție este apelată doar dacă elementul `products-grid` există
-    // Aceasta presupune că ai deja o funcție `displayProductsOnStorePage` undeva (e.g., în main.js sau chiar aici)
     const productsGridElement = document.getElementById('products-grid');
     if (productsGridElement && typeof displayProductsOnStorePage === 'function') {
         displayProductsOnStorePage();
     }
 
-
-    // Delegare de evenimente pentru butoanele "Adaugă în Coș" de pe pagina de produse
-    // (Presupunând că produsele sunt încărcate dinamic sau că butoanele au data-* atribute)
     document.body.addEventListener('click', (event) => {
         const target = event.target;
         if (target.classList.contains('add-to-cart-btn')) {
-            // Colectează datele produsului de la butoanele data-set
             const product = {
                 id: target.dataset.productId,
                 name: target.dataset.productName,
                 price: parseFloat(target.dataset.productPrice),
-                image: target.dataset.productImage // Asigură-te că ai acest data-attribute
+                image: target.dataset.productImage 
             };
             addToCart(product);
         }
@@ -364,21 +348,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// NOU: Funcție pentru a afișa produsele pe pagina produse.html
-// Este esențial ca această funcție să existe undeva și să fie apelată.
-// Dacă nu ai main.js, o poți pune aici. Ideal ar fi într-un fișier dedicat afișării produselor pe site.
-// Am mutat această funcție din cart.js, dacă vrei să ai o separare mai bună a responsabilităților,
-// dar o las aici pentru compatibilitatea cu codul tău.
+//Funcție pentru a afișa produsele pe pagina produse.html
 function displayProductsOnStorePage() {
     const productsGridElement = document.getElementById('products-grid');
     if (!productsGridElement) return;
 
     productsGridElement.innerHTML = '';
 
-    // ATENȚIE: Aici apelăm getProducts() care ar trebui să fie definită.
-    // Presupunem că e în admin.js sau că o vei face globală.
-    // Pentru a ne asigura că funcționează, o vom defini aici dacă nu e globală.
-    const products = JSON.parse(localStorage.getItem('products')) || []; // Fallback local
+    const products = JSON.parse(localStorage.getItem('products')) || [];
 
     if (products.length === 0) {
         productsGridElement.innerHTML = '<p class="empty-cart-message" style="width: 100%; text-align: center;">Momentan nu sunt produse disponibile. Vă rugăm să reveniți mai târziu.</p>';

@@ -1,9 +1,6 @@
-// admin.js
-
-// 1. Definim credențialele de administrator
 const ADMIN_USERNAME = "admin";
 const ADMIN_PASSWORD = "password";
-let currentEditingProductId = null; // Va reține ID-ul produsului pe care îl edităm
+let currentEditingProductId = null;
 
 // Funcție pentru a verifica dacă utilizatorul este logat
 function isLoggedIn() {
@@ -16,7 +13,7 @@ function loginUser(username, password) {
         localStorage.setItem('loggedInUser', ADMIN_USERNAME);
         showAlert("Autentificare reușită!");
         setTimeout(() => {
-            window.location.href = 'admin.html'; // Redirecționează către panoul de administrare
+            window.location.href = 'admin.html';
         }, 1500);
         return true;
     } else {
@@ -189,8 +186,6 @@ function displayAdminProducts() {
     });
 }
 
-// ************* NOU: Funcții pentru gestionarea COMENZILOR în panoul de administrare *************
-
 // Funcție pentru a obține toate comenzile (definită și în cart.js, dar o punem și aici pentru admin)
 function getOrders() {
     return JSON.parse(localStorage.getItem('orders')) || [];
@@ -294,9 +289,6 @@ function deleteOrder(orderId) {
         }
     );
 }
-
-// Nota: funcția showAlert este definită în cart.js. Ne asigurăm că e disponibilă.
-// Ideal ar fi într-un fișier utilitar separat (ex: utils.js).
 
 // 2. Logică pentru afișarea/ascunderea link-ului de admin/logout în navigație
 document.addEventListener('DOMContentLoaded', () => {
@@ -412,6 +404,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         displayAdminProducts();
-        displayAdminOrders(); // NOU: Afișează comenzile în admin panel
+        displayAdminOrders(); 
     }
 });
