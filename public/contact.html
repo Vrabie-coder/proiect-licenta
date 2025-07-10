@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - The Sparrows' Hive</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">
+                    <div class="logo-icon">🍯</div>
+                    <span class="logo-text">The Sparrows' Hive</span>
+                </a>
+                
+                <nav class="nav">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/products" class="nav-link">Products</a>
+                    <a href="/contact" class="nav-link">Contact</a>
+                </nav>
+                
+                <div class="header-actions">
+                    <a href="/cart" class="cart-icon">
+                        🛒
+                        <span class="cart-badge" style="display: none;">0</span>
+                    </a>
+                    <a href="/login" class="btn btn-secondary">Admin Login</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container" style="padding: 48px 20px;">
+            <div style="text-align: center; margin-bottom: 48px;">
+                <h1 style="font-size: 2.5rem; margin-bottom: 16px; color: #111827;">Get in Touch</h1>
+                <p style="font-size: 1.25rem; color: #6b7280;">We'd love to hear from you. Send us a message!</p>
+            </div>
+
+            <div class="grid grid-cols-2" style="gap: 48px;">
+                <!-- Contact Information -->
+                <div>
+                    <h2 style="font-size: 1.5rem; margin-bottom: 24px; color: #111827;">Contact Information</h2>
+                    
+                    <div style="margin-bottom: 24px;">
+                        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+                            <div style="width: 48px; height: 48px; background: #d97706; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">
+                                📞
+                            </div>
+                            <div>
+                                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 4px;">Phone</h3>
+                                <p style="color: #6b7280;">+40764742237</p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+                            <div style="width: 48px; height: 48px; background: #d97706; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">
+                                ✉️
+                            </div>
+                            <div>
+                                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 4px;">Email</h3>
+                                <p style="color: #6b7280;">TheSparrowsHive@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+                            <div style="width: 48px; height: 48px; background: #d97706; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">
+                                📍
+                            </div>
+                            <div>
+                                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 4px;">Address</h3>
+                                <p style="color: #6b7280;">Str. 1 Decembrie 1918</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: #fef3c7; padding: 24px; border-radius: 12px;">
+                        <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 16px; color: #111827;">Business Hours</h3>
+                        <div style="color: #6b7280;">
+                            <div style="display: flex; justify-between; margin-bottom: 8px;">
+                                <span>Monday - Friday:</span>
+                                <span>9:00 AM - 6:00 PM</span>
+                            </div>
+                            <div style="display: flex; justify-between; margin-bottom: 8px;">
+                                <span>Saturday:</span>
+                                <span>Closed</span>
+                            </div>
+                            <div style="display: flex; justify-between;">
+                                <span>Sunday:</span>
+                                <span>Closed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div>
+                    <h2 style="font-size: 1.5rem; margin-bottom: 24px; color: #111827;">Send us a Message</h2>
+                    
+                    <div id="contact-success" style="display: none;">
+                        <div style="background: #d1fae5; border: 1px solid #a7f3d0; color: #065f46; padding: 24px; border-radius: 12px; text-align: center;">
+                            <div style="width: 64px; height: 64px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: white; font-size: 24px;">
+                                ✓
+                            </div>
+                            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 8px;">Message Sent!</h3>
+                            <p>Thank you for your message. We'll get back to you soon.</p>
+                        </div>
+                    </div>
+
+                    <form id="contact-form" style="display: block;">
+                        <div class="form-group">
+                            <label class="form-label" for="contact-name">Your Name</label>
+                            <input type="text" id="contact-name" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="contact-email">Your Email</label>
+                            <input type="email" id="contact-email" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="contact-message">Your Message</label>
+                            <textarea id="contact-message" class="form-textarea" rows="5" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            📧 Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <div class="logo-icon">🍯</div>
+                        <span style="font-size: 24px; font-weight: bold;">The Sparrows' Hive</span>
+                    </div>
+                    <p>Best honey products sourced from our own source. Experience the pure taste of nature's sweetest gift.</p>
+                    <div style="margin-top: 16px;">
+                        <p>📞 +40764742237</p>
+                        <p>✉️ TheSparrowsHive@gmail.com</p>
+                        <p>📍 Str. 1 Decembrie 1918</p>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/products">Products</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/login">Admin</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Our Promise</h3>
+                    <ul>
+                        <li>• 100% Pure Honey</li>
+                        <li>• From our own source</li>
+                        <li>• Sustainable Practices</li>
+                        <li>• Quality Guaranteed</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 The Sparrows' Hive. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/utils.js"></script>
+    <script>
+        // Handle contact form submission
+        async function handleContactForm(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            if (!Utils.validateForm(form)) {
+                Utils.showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+
+            const formData = {
+                name: document.getElementById('contact-name').value,
+                email: document.getElementById('contact-email').value,
+                message: document.getElementById('contact-message').value
+            };
+
+            try {
+                await Utils.api('/contact', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // Show success message
+                document.getElementById('contact-form').style.display = 'none';
+                document.getElementById('contact-success').style.display = 'block';
+
+                // Reset form after delay
+                setTimeout(() => {
+                    document.getElementById('contact-form').style.display = 'block';
+                    document.getElementById('contact-success').style.display = 'none';
+                    form.reset();
+                }, 3000);
+
+                Utils.showNotification('Message sent successfully!', 'success');
+            } catch (error) {
+                Utils.showNotification('Failed to send message. Please try again.', 'error');
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('contact-form').addEventListener('submit', handleContactForm);
+        });
+    </script>
+
+    <style>
+        @media (max-width: 768px) {
+            .grid-cols-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>

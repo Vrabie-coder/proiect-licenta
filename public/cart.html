@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - The Sparrows' Hive</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">
+                    <div class="logo-icon">🍯</div>
+                    <span class="logo-text">The Sparrows' Hive</span>
+                </a>
+                
+                <nav class="nav">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/products" class="nav-link">Products</a>
+                    <a href="/contact" class="nav-link">Contact</a>
+                </nav>
+                
+                <div class="header-actions">
+                    <a href="/cart" class="cart-icon">
+                        🛒
+                        <span class="cart-badge" style="display: none;">0</span>
+                    </a>
+                    <a href="/login" class="btn btn-secondary">Admin Login</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container" style="padding: 48px 20px;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 32px; color: #111827;">Shopping Cart</h1>
+
+            <!-- Empty Cart State -->
+            <div id="empty-cart" style="display: none; text-align: center; padding: 48px;">
+                <div style="font-size: 64px; margin-bottom: 16px;">🛒</div>
+                <h2 style="font-size: 1.5rem; margin-bottom: 8px; color: #111827;">Your cart is empty</h2>
+                <p style="color: #6b7280; margin-bottom: 32px;">Add some delicious honey to your cart!</p>
+                <a href="/products" class="btn btn-primary">Shop Now</a>
+            </div>
+
+            <!-- Cart Items -->
+            <div id="cart-content" style="display: none;">
+                <div id="cart-items"></div>
+
+                <!-- Cart Total -->
+                <div class="cart-total">
+                    <div class="total-row">
+                        <span class="total-label">Total:</span>
+                        <span id="cart-total-amount" class="total-amount">$0.00</span>
+                    </div>
+                    <button id="checkout-btn" class="btn btn-primary" style="width: 100%;">
+                        Proceed to Checkout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Checkout Form -->
+            <div id="checkout-form" style="display: none;">
+                <div class="card" style="padding: 32px; margin-top: 32px;">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 24px; color: #111827;">Checkout</h2>
+                    
+                    <form id="order-form">
+                        <div class="form-group">
+                            <label class="form-label" for="customer-name">Full Name</label>
+                            <input type="text" id="customer-name" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="customer-email">Email</label>
+                            <input type="email" id="customer-email" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="customer-phone">Phone</label>
+                            <input type="tel" id="customer-phone" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="customer-address">Address</label>
+                            <textarea id="customer-address" class="form-textarea" rows="3" required></textarea>
+                        </div>
+
+                        <div style="background: #f9fafb; padding: 16px; border-radius: 8px; margin-bottom: 24px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-weight: 500;">Total:</span>
+                                <span id="checkout-total" style="font-size: 1.25rem; font-weight: bold; color: #d97706;">$0.00</span>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 16px;">
+                            <button type="button" id="back-to-cart" class="btn btn-secondary" style="flex: 1;">
+                                Back to Cart
+                            </button>
+                            <button type="submit" class="btn btn-primary" style="flex: 1;">
+                                Place Order
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Order Success -->
+            <div id="order-success" style="display: none;">
+                <div class="card" style="padding: 48px; text-align: center; margin-top: 32px;">
+                    <div style="width: 64px; height: 64px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: white; font-size: 24px;">
+                        ✓
+                    </div>
+                    <h2 style="font-size: 1.5rem; color: #10b981; margin-bottom: 8px;">Order Placed Successfully!</h2>
+                    <p style="color: #6b7280; margin-bottom: 24px;">Thank you for your order. We'll send you a confirmation email shortly.</p>
+                    <button id="continue-shopping" class="btn btn-primary">Continue Shopping</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <div class="logo-icon">🍯</div>
+                        <span style="font-size: 24px; font-weight: bold;">The Sparrows' Hive</span>
+                    </div>
+                    <p>Best honey products sourced from our own source. Experience the pure taste of nature's sweetest gift.</p>
+                    <div style="margin-top: 16px;">
+                        <p>📞 +40764742237</p>
+                        <p>✉️ TheSparrowsHive@gmail.com</p>
+                        <p>📍 Str. 1 Decembrie 1918</p>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/products">Products</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/login">Admin</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Our Promise</h3>
+                    <ul>
+                        <li>• 100% Pure Honey</li>
+                        <li>• From our own source</li>
+                        <li>• Sustainable Practices</li>
+                        <li>• Quality Guaranteed</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 The Sparrows' Hive. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/utils.js"></script>
+    <script>
+        let currentView = 'cart'; // 'cart', 'checkout', 'success'
+
+        // Display cart items
+        function displayCart() {
+            const cart = Utils.getCart();
+            const emptyCart = document.getElementById('empty-cart');
+            const cartContent = document.getElementById('cart-content');
+            const cartItems = document.getElementById('cart-items');
+            const totalAmount = document.getElementById('cart-total-amount');
+
+            if (cart.length === 0) {
+                emptyCart.style.display = 'block';
+                cartContent.style.display = 'none';
+                return;
+            }
+
+            emptyCart.style.display = 'none';
+            cartContent.style.display = 'block';
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            totalAmount.textContent = Utils.formatPrice(total);
+
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                    <div class="cart-item-info">
+                        <h3 class="cart-item-name">${item.name}</h3>
+                        <p class="cart-item-price">${Utils.formatPrice(item.price)}</p>
+                    </div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn" onclick="updateQuantity('${item._id}', ${item.quantity - 1})">-</button>
+                        <span class="quantity-display">${item.quantity}</span>
+                        <button class="quantity-btn" onclick="updateQuantity('${item._id}', ${item.quantity + 1})">+</button>
+                    </div>
+                    <div style="font-size: 1.125rem; font-weight: 600;">
+                        ${Utils.formatPrice(item.price * item.quantity)}
+                    </div>
+                    <button class="btn btn-danger" style="padding: 8px;" onclick="removeItem('${item._id}')">
+                        🗑️
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Update quantity
+        function updateQuantity(productId, newQuantity) {
+            Utils.updateCartQuantity(productId, newQuantity);
+            displayCart();
+        }
+
+        // Remove item
+        function removeItem(productId) {
+            Utils.removeFromCart(productId);
+            displayCart();
+        }
+
+        // Show checkout form
+        function showCheckout() {
+            const cart = Utils.getCart();
+            if (cart.length === 0) return;
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('checkout-total').textContent = Utils.formatPrice(total);
+
+            document.getElementById('cart-content').style.display = 'none';
+            document.getElementById('checkout-form').style.display = 'block';
+            currentView = 'checkout';
+        }
+
+        // Show cart
+        function showCart() {
+            document.getElementById('checkout-form').style.display = 'none';
+            document.getElementById('order-success').style.display = 'none';
+            displayCart();
+            currentView = 'cart';
+        }
+
+        // Place order
+        async function placeOrder(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            if (!Utils.validateForm(form)) {
+                Utils.showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+
+            const cart = Utils.getCart();
+            if (cart.length === 0) {
+                Utils.showNotification('Your cart is empty', 'error');
+                return;
+            }
+
+            const customerInfo = {
+                name: document.getElementById('customer-name').value,
+                email: document.getElementById('customer-email').value,
+                phone: document.getElementById('customer-phone').value,
+                address: document.getElementById('customer-address').value
+            };
+
+            const orderData = {
+                items: cart.map(item => ({
+                    productId: item._id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    image: item.image
+                })),
+                customerInfo,
+                total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+            };
+
+            try {
+                await Utils.api('/orders', {
+                    method: 'POST',
+                    body: orderData
+                });
+
+                Utils.clearCart();
+                showOrderSuccess();
+                Utils.showNotification('Order placed successfully!', 'success');
+            } catch (error) {
+                Utils.showNotification('Failed to place order. Please try again.', 'error');
+            }
+        }
+
+        // Show order success
+        function showOrderSuccess() {
+            document.getElementById('checkout-form').style.display = 'none';
+            document.getElementById('order-success').style.display = 'block';
+            currentView = 'success';
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            displayCart();
+
+            document.getElementById('checkout-btn').addEventListener('click', showCheckout);
+            document.getElementById('back-to-cart').addEventListener('click', showCart);
+            document.getElementById('order-form').addEventListener('submit', placeOrder);
+            document.getElementById('continue-shopping').addEventListener('click', () => {
+                window.location.href = '/products';
+            });
+        });
+    </script>
+</body>
+</html>

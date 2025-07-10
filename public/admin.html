@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - The Sparrows' Hive</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">
+                    <div class="logo-icon">🍯</div>
+                    <span class="logo-text">The Sparrows' Hive</span>
+                </a>
+                
+                <nav class="nav">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/products" class="nav-link">Products</a>
+                    <a href="/contact" class="nav-link">Contact</a>
+                </nav>
+                
+                <div class="header-actions">
+                    <a href="/cart" class="cart-icon">
+                        🛒
+                        <span class="cart-badge" style="display: none;">0</span>
+                    </a>
+                    <button id="logout-btn" class="btn btn-secondary">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container" style="padding: 48px 20px;">
+            <div class="admin-header">
+                <h1 style="font-size: 2.5rem; color: #111827;">Admin Dashboard</h1>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="overview" onclick="switchTab('overview')">Overview</button>
+                <button class="admin-tab" data-tab="products" onclick="switchTab('products')">Products</button>
+                <button class="admin-tab" data-tab="orders" onclick="switchTab('orders')">Orders</button>
+            </div>
+
+            <!-- Overview Tab -->
+            <div id="overview-tab" class="tab-content">
+                <div id="stats-grid" class="stats-grid">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Tab -->
+            <div id="products-tab" class="tab-content" style="display: none;">
+                <div style="display: flex; justify-between; align-items: center; margin-bottom: 24px;">
+                    <h2 style="font-size: 1.5rem; color: #111827;">Products</h2>
+                    <button id="add-product-btn" class="btn btn-primary">➕ Add Product</button>
+                </div>
+
+                <!-- Add/Edit Product Form -->
+                <div id="product-form" class="card" style="display: none; padding: 24px; margin-bottom: 24px;">
+                    <h3 id="form-title" style="margin-bottom: 16px;">Add New Product</h3>
+                    <form id="product-form-element">
+                        <div class="grid grid-cols-2" style="gap: 16px;">
+                            <div class="form-group">
+                                <label class="form-label" for="product-name">Product Name</label>
+                                <input type="text" id="product-name" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="product-price">Price (EUR)</label>
+                                <input type="number" id="product-price" class="form-input" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="product-description">Description</label>
+                            <textarea id="product-description" class="form-textarea" rows="3" required></textarea>
+                        </div>
+                        <div class="grid grid-cols-2" style="gap: 16px;">
+                            <div class="form-group">
+                                <label class="form-label" for="product-image">Image URL</label>
+                                <input type="text" id="product-image" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="product-category">Category</label>
+                                <input type="text" id="product-category" class="form-input" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" id="product-instock" checked>
+                                <span>In Stock</span>
+                            </label>
+                        </div>
+                        <div style="display: flex; gap: 16px;">
+                            <button type="submit" class="btn btn-primary" style="flex: 1;">Save Product</button>
+                            <button type="button" id="cancel-form" class="btn btn-secondary" style="flex: 1;">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="products-grid" class="grid grid-cols-3">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Tab -->
+            <div id="orders-tab" class="tab-content" style="display: none;">
+                <h2 style="font-size: 1.5rem; color: #111827; margin-bottom: 24px;">Orders</h2>
+                <div id="orders-list">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/utils.js"></script>
+    <script>
+        let currentTab = 'overview';
+        let editingProductId = null;
+        let products = [];
+        let orders = [];
+
+        // Check authentication on page load
+        async function checkAuth() {
+            const isAuthenticated = await Utils.requireAuth();
+            if (!isAuthenticated) return;
+            
+            loadOverview();
+        }
+
+        // Switch tabs
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.admin-tab').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.tab === tab) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+
+            // Show selected tab
+            document.getElementById(`${tab}-tab`).style.display = 'block';
+            currentTab = tab;
+
+            // Load tab data
+            switch (tab) {
+                case 'overview':
+                    loadOverview();
+                    break;
+                case 'products':
+                    loadProducts();
+                    break;
+                case 'orders':
+                    loadOrders();
+                    break;
+            }
+        }
+
+        // Load overview stats
+        async function loadOverview() {
+            try {
+                const [productsData, ordersData] = await Promise.all([
+                    Utils.api('/products'),
+                    Utils.api('/orders')
+                ]);
+
+                products = productsData;
+                orders = ordersData;
+
+                const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+                const pendingOrders = orders.filter(order => order.status === 'pending').length;
+
+                document.getElementById('stats-grid').innerHTML = `
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-label">Total Products</div>
+                                <div class="stat-value">${products.length}</div>
+                            </div>
+                            <div class="stat-icon">📦</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-label">Total Orders</div>
+                                <div class="stat-value">${orders.length}</div>
+                            </div>
+                            <div class="stat-icon">🛒</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-label">Revenue</div>
+                                <div class="stat-value">${Utils.formatPrice(totalRevenue)}</div>
+                            </div>
+                            <div class="stat-icon">📈</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-label">Pending Orders</div>
+                                <div class="stat-value">${pendingOrders}</div>
+                            </div>
+                            <div class="stat-icon">⏳</div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('stats-grid').innerHTML = 
+                    '<div class="alert alert-error">Failed to load overview data</div>';
+            }
+        }
+
+        // Load products
+        async function loadProducts() {
+            try {
+                products = await Utils.api('/products');
+                displayProducts();
+            } catch (error) {
+                document.getElementById('products-grid').innerHTML = 
+                    '<div class="alert alert-error">Failed to load products</div>';
+            }
+        }
+
+        // Display products
+        function displayProducts() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <h3 class="product-name">${product.name}</h3>
+                            <span class="product-category">${product.category}</span>
+                        </div>
+                        <p class="product-description">${product.description}</p>
+                        <div style="display: flex; justify-between; align-items: center; margin-bottom: 16px;">
+                            <span class="product-price">${Utils.formatPrice(product.price)}</span>
+                            <span class="status-badge status-${product.inStock ? 'delivered' : 'pending'}">
+                                ${product.inStock ? 'In Stock' : 'Out of Stock'}
+                            </span>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary" style="flex: 1; padding: 8px;" onclick="editProduct('${product._id}')">
+                                ✏️ Edit
+                            </button>
+                            <button class="btn btn-danger" style="flex: 1; padding: 8px;" onclick="deleteProduct('${product._id}')">
+                                🗑️ Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Show product form
+        function showProductForm(product = null) {
+            const form = document.getElementById('product-form');
+            const title = document.getElementById('form-title');
+            
+            if (product) {
+                title.textContent = 'Edit Product';
+                document.getElementById('product-name').value = product.name;
+                document.getElementById('product-price').value = product.price;
+                document.getElementById('product-description').value = product.description;
+                document.getElementById('product-image').value = product.image;
+                document.getElementById('product-category').value = product.category;
+                document.getElementById('product-instock').checked = product.inStock;
+                editingProductId = product._id;
+            } else {
+                title.textContent = 'Add New Product';
+                document.getElementById('product-form-element').reset();
+                editingProductId = null;
+            }
+            
+            form.style.display = 'block';
+        }
+
+        // Hide product form
+        function hideProductForm() {
+            document.getElementById('product-form').style.display = 'none';
+            editingProductId = null;
+        }
+
+        // Save product
+        async function saveProduct(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            if (!Utils.validateForm(form)) {
+                Utils.showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+
+            const productData = {
+                name: document.getElementById('product-name').value,
+                price: parseFloat(document.getElementById('product-price').value),
+                description: document.getElementById('product-description').value,
+                image: document.getElementById('product-image').value,
+                category: document.getElementById('product-category').value,
+                inStock: document.getElementById('product-instock').checked
+            };
+
+            try {
+                if (editingProductId) {
+                    await Utils.api(`/products/${editingProductId}`, {
+                        method: 'PUT',
+                        body: productData
+                    });
+                    Utils.showNotification('Product updated successfully!', 'success');
+                } else {
+                    await Utils.api('/products', {
+                        method: 'POST',
+                        body: productData
+                    });
+                    Utils.showNotification('Product added successfully!', 'success');
+                }
+                
+                hideProductForm();
+                loadProducts();
+            } catch (error) {
+                Utils.showNotification('Failed to save product', 'error');
+            }
+        }
+
+        // Edit product
+        function editProduct(productId) {
+            const product = products.find(p => p._id === productId);
+            if (product) {
+                showProductForm(product);
+            }
+        }
+
+        // Delete product
+        async function deleteProduct(productId) {
+            if (!confirm('Are you sure you want to delete this product?')) return;
+
+            try {
+                await Utils.api(`/products/${productId}`, { method: 'DELETE' });
+                Utils.showNotification('Product deleted successfully!', 'success');
+                loadProducts();
+            } catch (error) {
+                Utils.showNotification('Failed to delete product', 'error');
+            }
+        }
+
+        // Load orders
+        async function loadOrders() {
+            try {
+                orders = await Utils.api('/orders');
+                displayOrders();
+            } catch (error) {
+                document.getElementById('orders-list').innerHTML = 
+                    '<div class="alert alert-error">Failed to load orders</div>';
+            }
+        }
+
+        // Display orders
+        function displayOrders() {
+            const container = document.getElementById('orders-list');
+            
+            if (orders.length === 0) {
+                container.innerHTML = '<div class="alert alert-info">No orders found</div>';
+                return;
+            }
+
+            container.innerHTML = orders.map(order => `
+                <div class="card" style="padding: 24px; margin-bottom: 16px;">
+                    <div style="display: flex; justify-between; align-items: start; margin-bottom: 16px;">
+                        <div>
+                            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 4px;">Order #${order._id.slice(-8)}</h3>
+                            <p style="color: #6b7280; margin-bottom: 4px;">${Utils.formatDate(order.createdAt)}</p>
+                            <p style="color: #6b7280;">${order.customerInfo.name} - ${order.customerInfo.email}</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <p style="font-size: 1.5rem; font-weight: bold; color: #d97706; margin-bottom: 8px;">
+                                ${Utils.formatPrice(order.total)}
+                            </p>
+                            <select class="form-select" style="width: auto;" onchange="updateOrderStatus('${order._id}', this.value)">
+                                <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>Processing</option>
+                                <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Shipped</option>
+                                <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="border-top: 1px solid #e5e7eb; padding-top: 16px;">
+                        <h4 style="font-weight: 600; margin-bottom: 8px;">Items:</h4>
+                        <ul style="list-style: none;">
+                            ${order.items.map(item => `
+                                <li style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.875rem;">
+                                    <span>${item.name} x ${item.quantity}</span>
+                                    <span>${Utils.formatPrice(item.price * item.quantity)}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update order status
+        async function updateOrderStatus(orderId, status) {
+            try {
+                await Utils.api(`/orders/${orderId}/status`, {
+                    method: 'PUT',
+                    body: { status }
+                });
+                Utils.showNotification('Order status updated!', 'success');
+                loadOrders();
+            } catch (error) {
+                Utils.showNotification('Failed to update order status', 'error');
+            }
+        }
+
+        // Logout
+        async function logout() {
+            try {
+                await Utils.api('/logout', { method: 'POST' });
+                window.location.href = '/login';
+            } catch (error) {
+                window.location.href = '/login';
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+
+            // Event listeners
+            document.getElementById('add-product-btn').addEventListener('click', () => showProductForm());
+            document.getElementById('cancel-form').addEventListener('click', hideProductForm);
+            document.getElementById('product-form-element').addEventListener('submit', saveProduct);
+            document.getElementById('logout-btn').addEventListener('click', logout);
+        });
+    </script>
+</body>
+</html>

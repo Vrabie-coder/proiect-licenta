@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - The Sparrows' Hive</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">
+                    <div class="logo-icon">🍯</div>
+                    <span class="logo-text">The Sparrows' Hive</span>
+                </a>
+                
+                <nav class="nav">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/products" class="nav-link">Products</a>
+                    <a href="/contact" class="nav-link">Contact</a>
+                </nav>
+                
+                <div class="header-actions">
+                    <a href="/cart" class="cart-icon">
+                        🛒
+                        <span class="cart-badge" style="display: none;">0</span>
+                    </a>
+                    <a href="/login" class="btn btn-secondary">Admin Login</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container" style="padding: 48px 20px;">
+            <div style="text-align: center; margin-bottom: 48px;">
+                <h1 style="font-size: 2.5rem; margin-bottom: 16px; color: #111827;">Our Premium Honey Collection</h1>
+                <p style="font-size: 1.25rem; color: #6b7280;">Discover the finest honey varieties from around the world</p>
+            </div>
+
+            <!-- Filter Section -->
+            <div style="margin-bottom: 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 20px;">🔍</span>
+                    <span style="font-weight: 500; color: #374151;">Filter by category:</span>
+                </div>
+                <div id="category-filters" style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <button class="filter-btn active" data-category="all">All Products</button>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="products-grid" class="grid grid-cols-3">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+
+            <div id="no-products" style="display: none; text-align: center; padding: 48px;">
+                <p style="color: #6b7280; font-size: 1.125rem;">No products found in this category.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <div class="logo-icon">🍯</div>
+                        <span style="font-size: 24px; font-weight: bold;">The Sparrows' Hive</span>
+                    </div>
+                    <p>Best honey products sourced from our own source. Experience the pure taste of nature's sweetest gift.</p>
+                    <div style="margin-top: 16px;">
+                        <p>📞 +40764742237</p>
+                        <p>✉️ TheSparrowsHive@gmail.com</p>
+                        <p>📍 Str. 1 Decembrie 1918</p>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/products">Products</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/login">Admin</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Our Promise</h3>
+                    <ul>
+                        <li>• 100% Pure Honey</li>
+                        <li>• From our own source</li>
+                        <li>• Sustainable Practices</li>
+                        <li>• Quality Guaranteed</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 The Sparrows' Hive. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/utils.js"></script>
+    <script>
+        let allProducts = [];
+        let currentCategory = 'all';
+
+        // Load products
+        async function loadProducts() {
+            try {
+                allProducts = await Utils.api('/products');
+                setupCategoryFilters();
+                displayProducts(allProducts);
+            } catch (error) {
+                document.getElementById('products-grid').innerHTML = 
+                    '<div class="alert alert-error">Failed to load products. Please try again later.</div>';
+            }
+        }
+
+        // Setup category filters
+        function setupCategoryFilters() {
+            const categories = ['all', ...new Set(allProducts.map(p => p.category))];
+            const filtersContainer = document.getElementById('category-filters');
+            
+            filtersContainer.innerHTML = categories.map(category => `
+                <button class="filter-btn ${category === 'all' ? 'active' : ''}" 
+                        data-category="${category}" 
+                        onclick="filterProducts('${category}')">
+                    ${category === 'all' ? 'All Products' : category}
+                </button>
+            `).join('');
+        }
+
+        // Filter products
+        function filterProducts(category) {
+            currentCategory = category;
+            
+            // Update active filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.category === category) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Filter and display products
+            const filteredProducts = category === 'all' 
+                ? allProducts 
+                : allProducts.filter(p => p.category === category);
+            
+            displayProducts(filteredProducts);
+        }
+
+        // Display products
+        function displayProducts(products) {
+            const grid = document.getElementById('products-grid');
+            const noProducts = document.getElementById('no-products');
+
+            if (products.length === 0) {
+                grid.style.display = 'none';
+                noProducts.style.display = 'block';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            noProducts.style.display = 'none';
+
+            grid.innerHTML = products.map(product => `
+                <div class="product-card fade-in">
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <h3 class="product-name">${product.name}</h3>
+                            <span class="product-category">${product.category}</span>
+                        </div>
+                        <p class="product-description">${product.description}</p>
+                        <div class="product-footer">
+                            <span class="product-price">${Utils.formatPrice(product.price)}</span>
+                            <button class="btn ${product.inStock ? 'btn-primary' : 'btn-secondary'}" 
+                                    ${!product.inStock ? 'disabled' : ''}
+                                    onclick="Utils.addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})">
+                                🛒 ${product.inStock ? 'Add to Cart' : 'Out of Stock'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', loadProducts);
+    </script>
+
+    <style>
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #d1d5db;
+            background: white;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .filter-btn.active {
+            background: #d97706;
+            color: white;
+            border-color: #d97706;
+        }
+
+        .filter-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</body>
+</html>

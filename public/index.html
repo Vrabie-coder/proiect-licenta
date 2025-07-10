@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sparrows' Hive - Home</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">
+                    <div class="logo-icon">🍯</div>
+                    <span class="logo-text">The Sparrows' Hive</span>
+                </a>
+                
+                <nav class="nav">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/products" class="nav-link">Products</a>
+                    <a href="/contact" class="nav-link">Contact</a>
+                </nav>
+                
+                <div class="header-actions">
+                    <a href="/cart" class="cart-icon">
+                        🛒
+                        <span class="cart-badge" style="display: none;">0</span>
+                    </a>
+                    <a href="/login" class="btn btn-secondary">Admin Login</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>Pure Honey<br><span style="color: #fef3c7;">From Nature</span></h1>
+                <p>Discover our authentic honey and products extracted from our own apiary.</p>
+                <div class="hero-actions">
+                    <a href="/products" class="btn btn-primary">Shop Now →</a>
+                    <a href="/contact" class="btn btn-secondary">Learn More</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <h2>Why Choose The Sparrows' Hive?</h2>
+                <p class="features-subtitle">Experience the difference that quality makes</p>
+                
+                <div class="grid grid-cols-3">
+                    <div class="feature-card">
+                        <div class="feature-icon">🏆</div>
+                        <h3>Premium Quality</h3>
+                        <p>Every product is carefully selected and tested to ensure the highest quality standards.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🚚</div>
+                        <h3>Fast Delivery</h3>
+                        <p>Quick and secure shipping to bring nature's sweetness to your doorstep.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h3>Satisfaction Guarantee</h3>
+                        <p>We stand behind our products with a 100% satisfaction guarantee.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Products -->
+        <section class="products-section">
+            <div class="container">
+                <h2 class="section-title">Featured Products</h2>
+                <p class="section-subtitle">Taste the essence of our pure honey products</p>
+                
+                <div id="featured-products" class="grid grid-cols-3">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 48px;">
+                    <a href="/products" class="btn btn-primary">View All Products →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="hero" style="background: #92400e;">
+            <div class="container">
+                <h2 style="font-size: 2.5rem;">Ready to Experience Our Products?</h2>
+                <p>Join thousands of satisfied customers who have made the switch to our sweet honey products.</p>
+                <div class="hero-actions">
+                    <a href="/products" class="btn btn-primary">Start Shopping →</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <div class="logo-icon">🍯</div>
+                        <span style="font-size: 24px; font-weight: bold;">The Sparrows' Hive</span>
+                    </div>
+                    <p>Best honey products sourced from our own source. Experience the pure taste of nature's sweetest gift.</p>
+                    <div style="margin-top: 16px;">
+                        <p>📞 +40764742237</p>
+                        <p>✉️ TheSparrowsHive@gmail.com</p>
+                        <p>📍 Str. 1 Decembrie 1918</p>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/products">Products</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/login">Admin</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Our Promise</h3>
+                    <ul>
+                        <li>• 100% Pure Honey</li>
+                        <li>• From our own source</li>
+                        <li>• Sustainable Practices</li>
+                        <li>• Quality Guaranteed</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 The Sparrows' Hive. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/utils.js"></script>
+    <script>
+        // Load featured products
+        async function loadFeaturedProducts() {
+            try {
+                const products = await Utils.api('/products');
+                const featuredProducts = products.slice(0, 3);
+                
+                const container = document.getElementById('featured-products');
+                container.innerHTML = featuredProducts.map(product => `
+                    <div class="product-card fade-in">
+                        <img src="${product.image}" alt="${product.name}" class="product-image">
+                        <div class="product-info">
+                            <div class="product-header">
+                                <h3 class="product-name">${product.name}</h3>
+                                <span class="product-category">${product.category}</span>
+                            </div>
+                            <p class="product-description">${product.description}</p>
+                            <div class="product-footer">
+                                <span class="product-price">${Utils.formatPrice(product.price)}</span>
+                                <button class="btn btn-primary" onclick="Utils.addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                document.getElementById('featured-products').innerHTML = 
+                    '<div class="alert alert-error">Failed to load products. Please try again later.</div>';
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', loadFeaturedProducts);
+    </script>
+</body>
+</html>
