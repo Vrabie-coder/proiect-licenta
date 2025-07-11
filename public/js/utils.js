@@ -1,5 +1,5 @@
 class Utils {
-  // API helper
+  //API
   static async api(endpoint, options = {}) {
     const config = {
       headers: {
@@ -28,7 +28,7 @@ class Utils {
     }
   }
 
-  // Local storage helpers
+  //Local storage
   static getCart() {
     try {
       return JSON.parse(localStorage.getItem('cart') || '[]');
@@ -95,7 +95,7 @@ class Utils {
     }
   }
 
-  // Format currency
+  //Format currency
   static formatPrice(price) {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -103,7 +103,7 @@ class Utils {
     }).format(price);
   }
 
-  // Format date
+  //Format date
   static formatDate(dateString) {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -112,9 +112,8 @@ class Utils {
     });
   }
 
-  // Show notification
+  //Notificarile
   static showNotification(message, type = 'info') {
-    // Remove existing notifications
     const existing = document.querySelector('.notification');
     if (existing) {
       existing.remove();
@@ -140,12 +139,11 @@ class Utils {
     }, 3000);
   }
 
-  // Loading state
   static showLoading(element) {
     element.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
   }
 
-  // Set active navigation
+  //Navigarea
   static setActiveNav() {
     const currentPath = window.location.pathname;
     const navLinks = document.querySelectorAll('.nav-link');
@@ -159,7 +157,7 @@ class Utils {
     });
   }
 
-  // Form validation
+  //Formular validare
   static validateForm(form) {
     const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
     let isValid = true;
@@ -176,7 +174,6 @@ class Utils {
     return isValid;
   }
 
-  // Debounce function
   static debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -189,7 +186,7 @@ class Utils {
     };
   }
 
-  // Check authentication
+  //Verificare autentificare
   static async checkAuth() {
     try {
       const response = await this.api('/auth/check');
@@ -199,7 +196,7 @@ class Utils {
     }
   }
 
-  // Redirect if not authenticated
+  //Redirectare daca nu este autentificat
   static async requireAuth() {
     const isAuthenticated = await this.checkAuth();
     if (!isAuthenticated) {
@@ -225,7 +222,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-//Initialize cart badge on page load
 document.addEventListener('DOMContentLoaded', () => {
   Utils.updateCartBadge();
   Utils.setActiveNav();
