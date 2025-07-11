@@ -39,7 +39,7 @@
                 <p style="font-size: 1.25rem; color: #6b7280;">Discover the finest honey varieties from around the world</p>
             </div>
 
-            <!-- Filter Section -->
+            <!--Sectiunea de filtre-->
             <div style="margin-bottom: 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <span style="font-size: 20px;">🔍</span>
@@ -50,7 +50,7 @@
                 </div>
             </div>
 
-            <!-- Products Grid -->
+            <!--Grid de produse-->
             <div id="products-grid" class="grid grid-cols-3">
                 <div class="loading">
                     <div class="spinner"></div>
@@ -111,7 +111,7 @@
         let allProducts = [];
         let currentCategory = 'all';
 
-        // Load products
+        //Incarca produsele
         async function loadProducts() {
             try {
                 allProducts = await Utils.api('/products');
@@ -123,7 +123,7 @@
             }
         }
 
-        // Setup category filters
+        //Setupul categoriilor de produse
         function setupCategoryFilters() {
             const categories = ['all', ...new Set(allProducts.map(p => p.category))];
             const filtersContainer = document.getElementById('category-filters');
@@ -137,11 +137,11 @@
             `).join('');
         }
 
-        // Filter products
+        //Filtrarea produselor
         function filterProducts(category) {
             currentCategory = category;
             
-            // Update active filter button
+            //Butonul de filtrare
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if (btn.dataset.category === category) {
@@ -149,7 +149,7 @@
                 }
             });
 
-            // Filter and display products
+            //Filtreaza produsele
             const filteredProducts = category === 'all' 
                 ? allProducts 
                 : allProducts.filter(p => p.category === category);
@@ -157,7 +157,7 @@
             displayProducts(filteredProducts);
         }
 
-        // Display products
+        //Arata produsele
         function displayProducts(products) {
             const grid = document.getElementById('products-grid');
             const noProducts = document.getElementById('no-products');

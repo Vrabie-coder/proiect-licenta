@@ -33,7 +33,7 @@
     </header>
 
     <main>
-        <!-- Hero Section -->
+        <!--Sectiunea Hero-->
         <section class="hero">
             <div class="container">
                 <h1>Pure Honey<br><span style="color: #fef3c7;">From Nature</span></h1>
@@ -45,7 +45,7 @@
             </div>
         </section>
 
-        <!-- Features Section -->
+        <!--Sectiunea features-->
         <section class="features">
             <div class="container">
                 <h2>Why Choose The Sparrows' Hive?</h2>
@@ -73,7 +73,7 @@
             </div>
         </section>
 
-        <!-- Featured Products -->
+        <!--Produsele prezentate-->
         <section class="products-section">
             <div class="container">
                 <h2 class="section-title">Featured Products</h2>
@@ -91,7 +91,7 @@
             </div>
         </section>
 
-        <!-- CTA Section -->
+        <!--Sectiunea CTA-->
         <section class="hero" style="background: #92400e;">
             <div class="container">
                 <h2 style="font-size: 2.5rem;">Ready to Experience Our Products?</h2>
@@ -148,7 +148,6 @@
 
     <script src="/js/utils.js"></script>
     <script>
-        // Load featured products
         async function loadFeaturedProducts() {
             try {
                 const products = await Utils.api('/products');
@@ -179,7 +178,7 @@
             }
         }
 
-        // Initialize page
+        //Initializarea paginii
         document.addEventListener('DOMContentLoaded', loadFeaturedProducts);
     </script>
 </body>

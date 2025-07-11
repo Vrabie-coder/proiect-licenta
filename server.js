@@ -8,12 +8,12 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Initialize NeDB databases
+//Baza de date Nedb
 const productsDb = new Datastore({ filename: './data/products.db', autoload: true });
 const ordersDb = new Datastore({ filename: './data/orders.db', autoload: true });
 const adminsDb = new Datastore({ filename: './data/admins.db', autoload: true });
 
-// Middleware
+//Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -21,13 +21,13 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'honey-secret-key',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // 24 hours
+  cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
 }));
 
-// Initialize admin user and sample products
+
 async function initializeData() {
   try {
-    // Create admin user if doesn't exist
+    //Admin Default
     adminsDb.findOne({ username: 'admin' }, async (err, admin) => {
       if (err) {
         console.error('Error checking admin:', err);
@@ -46,7 +46,7 @@ async function initializeData() {
       }
     });
 
-    // Create sample products if none exist
+    //Conditie daca nu exista produse adaugate
     productsDb.count({}, (err, count) => {
       if (err) {
         console.error('Error counting products:', err);
@@ -125,7 +125,7 @@ async function initializeData() {
   }
 }
 
-// Authentication middleware
+//Middleware
 const requireAuth = (req, res, next) => {
   if (req.session.isAdmin) {
     next();
@@ -134,9 +134,7 @@ const requireAuth = (req, res, next) => {
   }
 };
 
-// API Routes
-
-// Products
+//Produse
 app.get('/api/products', (req, res) => {
   productsDb.find({}, (err, products) => {
     if (err) {
@@ -192,7 +190,7 @@ app.delete('/api/products/:id', requireAuth, (req, res) => {
   });
 });
 
-// Orders
+//Comenzi
 app.get('/api/orders', requireAuth, (req, res) => {
   ordersDb.find({}).sort({ createdAt: -1 }).exec((err, orders) => {
     if (err) {
@@ -236,7 +234,7 @@ app.put('/api/orders/:id/status', requireAuth, (req, res) => {
   });
 });
 
-// Authentication
+//Autentificare
 app.post('/api/login', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -268,10 +266,9 @@ app.get('/api/auth/check', (req, res) => {
   res.json({ isAdmin: !!req.session.isAdmin });
 });
 
-// Contact form
+//Contact
 app.post('/api/contact', async (req, res) => {
   try {
-    // In a real app, you'd send an email or save to database
     console.log('Contact form submission:', req.body);
     res.json({ success: true, message: 'Message sent successfully' });
   } catch (error) {
@@ -279,7 +276,7 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
-// Serve HTML pages
+//HTML
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -304,7 +301,6 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
   initializeData();

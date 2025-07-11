@@ -1,4 +1,3 @@
-/* Reset and Base Styles */
 * {
   margin: 0;
   padding: 0;
@@ -12,7 +11,6 @@ body {
   background-color: #fef7e7;
 }
 
-/* Utility Classes */
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -95,7 +93,7 @@ body {
   }
 }
 
-/* Header */
+/*Header*/
 .header {
   background: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -191,7 +189,7 @@ body {
   font-weight: bold;
 }
 
-/* Footer */
+/*Footer*/
 .footer {
   background: #92400e;
   color: white;
@@ -253,7 +251,7 @@ body {
   }
 }
 
-/* Hero Section */
+/*Sectiunea Hero*/
 .hero {
   background: linear-gradient(135deg, #f59e0b, #d97706);
   color: white;
@@ -306,7 +304,7 @@ body {
   }
 }
 
-/* Features Section */
+/*Sectiunea features*/
 .features {
   padding: 80px 0;
   background: white;
@@ -361,7 +359,7 @@ body {
   color: #6b7280;
 }
 
-/* Product Grid */
+/*Grid de produse*/
 .products-section {
   padding: 80px 0;
 }
@@ -443,7 +441,7 @@ body {
   color: #d97706;
 }
 
-/* Forms */
+/*Formulare*/
 .form-group {
   margin-bottom: 20px;
 }
@@ -474,7 +472,7 @@ body {
   min-height: 100px;
 }
 
-/* Cart */
+/*Cos*/
 .cart-item {
   display: flex;
   align-items: center;
@@ -562,7 +560,7 @@ body {
   color: #d97706;
 }
 
-/* Admin Dashboard */
+/*Panoul de admin*/
 .admin-header {
   display: flex;
   justify-content: space-between;
@@ -632,7 +630,7 @@ body {
   color: #d97706;
 }
 
-/* Alerts */
+/*Alerte*/
 .alert {
   padding: 16px;
   border-radius: 8px;
@@ -657,7 +655,7 @@ body {
   color: #1e40af;
 }
 
-/* Loading States */
+/*Statusul de incarcare*/
 .loading {
   display: flex;
   justify-content: center;
@@ -679,7 +677,7 @@ body {
   100% { transform: rotate(360deg); }
 }
 
-/* Responsive Design */
+/*Designul responsive*/
 @media (max-width: 768px) {
   .container {
     padding: 0 16px;
@@ -699,7 +697,7 @@ body {
   }
 }
 
-/* Animations */
+/*Animatii*/
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -709,7 +707,6 @@ body {
   animation: fadeIn 0.6s ease-out;
 }
 
-/* Status badges */
 .status-badge {
   padding: 4px 12px;
   border-radius: 12px;

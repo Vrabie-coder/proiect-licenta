@@ -67,7 +67,6 @@
 
     <script src="/js/utils.js"></script>
     <script>
-        // Handle login form submission
         async function handleLogin(event) {
             event.preventDefault();
             
@@ -75,7 +74,7 @@
             const errorDiv = document.getElementById('login-error');
             const submitBtn = form.querySelector('button[type="submit"]');
             
-            // Clear previous errors
+            //Curatarea erorilor anterioare
             errorDiv.style.display = 'none';
             
             if (!Utils.validateForm(form)) {
@@ -87,7 +86,7 @@
                 password: document.getElementById('password').value
             };
 
-            // Show loading state
+            //Arata statusul loginului
             const originalText = submitBtn.textContent;
             submitBtn.textContent = 'Signing in...';
             submitBtn.disabled = true;
@@ -109,7 +108,7 @@
             }
         }
 
-        // Check if already logged in
+        //Verifica daca este logat
         async function checkExistingAuth() {
             const isAuthenticated = await Utils.checkAuth();
             if (isAuthenticated) {
@@ -117,7 +116,7 @@
             }
         }
 
-        // Initialize page
+        //Initializarea paginii
         document.addEventListener('DOMContentLoaded', () => {
             checkExistingAuth();
             document.getElementById('login-form').addEventListener('submit', handleLogin);

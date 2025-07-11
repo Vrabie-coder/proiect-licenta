@@ -1,4 +1,3 @@
-// Utility functions
 class Utils {
   // API helper
   static async api(endpoint, options = {}) {
@@ -211,7 +210,7 @@ class Utils {
   }
 }
 
-// Add CSS for notifications
+//Adaugarea css pentru notificari
 const style = document.createElement('style');
 style.textContent = `
   @keyframes slideIn {
@@ -226,7 +225,7 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Initialize cart badge on page load
+//Initialize cart badge on page load
 document.addEventListener('DOMContentLoaded', () => {
   Utils.updateCartBadge();
   Utils.setActiveNav();

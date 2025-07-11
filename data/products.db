@@ -1,15 +1,6 @@
-{"name":"Propolis Tincture","price":10,"description":"Best natural antibiotic for your immune system!","image":"\\images\\Tinctura.jpg","category":"Bee products","inStock":true,"_id":"XAMqpiBOohung3M1"}
-{"name":"Pollen","price":10,"description":"The best source of energy and vitamins from our bees! ","image":"\\images\\Polen.jpg","category":"Bee products","inStock":true,"_id":"bXzXxLIzKEJzbgpf"}
-{"name":"Mana Honey","price":40,"description":"Honey with the highest content of minerals, antioxidants and prebiotics.\n","image":"\\images\\Miere_Mana.jpg","category":"Honey","inStock":true,"_id":"gUt6ObV4qgfFmjv6"}
-{"name":"Sunflower Honey","price":25,"description":"The simplest type of honey. Honey made 90% from sunflowers from the fields.\n","image":"\\images\\Miere_poliflora.jpg","category":"Honey","inStock":true,"_id":"mRKzmu00WPcs9QqO"}
-{"name":"Beebread","price":45,"description":"The best fermented pollen collected from our bee hives! ","image":"images\\Pastura.jpg","category":"Bee products","inStock":true,"_id":"qY76chVh3J7Iiypx"}
-{"name":"Comb with Honey","price":10,"description":"Best dessert from our dear bees! It is like a cake!\n","image":"images\\Fagure.jpg","category":"Honey Products","inStock":true,"_id":"rcBZ6Q5stiHfDgtx"}
-{"name":"Propolis Tincture","price":2,"description":"Best natural antibiotic for your immune system!","image":"\\images\\Tinctura.jpg","category":"Bee products","inStock":true,"_id":"XAMqpiBOohung3M1"}
-{"name":"Pollen","price":3,"description":"The best source of energy and vitamins from our bees! ","image":"\\images\\Polen.jpg","category":"Bee products","inStock":true,"_id":"bXzXxLIzKEJzbgpf"}
-{"name":"Mana Honey","price":10,"description":"Honey with the highest content of minerals, antioxidants and prebiotics.\n","image":"\\images\\Miere_Mana.jpg","category":"Honey","inStock":true,"_id":"gUt6ObV4qgfFmjv6"}
-{"name":"Propolis Tincture","price":5,"description":"Best natural antibiotic for your immune system!","image":"\\images\\Tinctura.jpg","category":"Bee products","inStock":true,"_id":"XAMqpiBOohung3M1"}
 {"name":"Propolis Tincture","price":5,"description":"Best natural antibiotic for your immune system!","image":"\\images\\Tinctura.jpg","category":"Bee products","inStock":true,"_id":"XAMqpiBOohung3M1"}
 {"name":"Pollen","price":5,"description":"The best source of energy and vitamins from our bees! ","image":"\\images\\Polen.jpg","category":"Bee products","inStock":true,"_id":"bXzXxLIzKEJzbgpf"}
+{"name":"Mana Honey","price":10,"description":"Honey with the highest content of minerals, antioxidants and prebiotics.\n","image":"\\images\\Miere_Mana.jpg","category":"Honey","inStock":true,"_id":"gUt6ObV4qgfFmjv6"}
 {"name":"Sunflower Honey","price":7,"description":"The simplest type of honey. Honey made 90% from sunflowers from the fields.\n","image":"\\images\\Miere_poliflora.jpg","category":"Honey","inStock":true,"_id":"mRKzmu00WPcs9QqO"}
 {"name":"Beebread","price":15,"description":"The best fermented pollen collected from our bee hives! ","image":"images\\Pastura.jpg","category":"Bee products","inStock":true,"_id":"qY76chVh3J7Iiypx"}
 {"name":"Comb with Honey","price":5,"description":"Best dessert from our dear bees! It is like a cake!\n","image":"images\\Fagure.jpg","category":"Honey Products","inStock":true,"_id":"rcBZ6Q5stiHfDgtx"}

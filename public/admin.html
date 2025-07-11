@@ -44,7 +44,7 @@
                 <button class="admin-tab" data-tab="orders" onclick="switchTab('orders')">Orders</button>
             </div>
 
-            <!-- Overview Tab -->
+            <!--Tabul overview-->
             <div id="overview-tab" class="tab-content">
                 <div id="stats-grid" class="stats-grid">
                     <div class="loading">
@@ -53,14 +53,14 @@
                 </div>
             </div>
 
-            <!-- Products Tab -->
+            <!--Tabul de produse-->
             <div id="products-tab" class="tab-content" style="display: none;">
                 <div style="display: flex; justify-between; align-items: center; margin-bottom: 24px;">
                     <h2 style="font-size: 1.5rem; color: #111827;">Products</h2>
                     <button id="add-product-btn" class="btn btn-primary">➕ Add Product</button>
                 </div>
 
-                <!-- Add/Edit Product Form -->
+                <!--Formular pentru adaugat si editat produse-->>
                 <div id="product-form" class="card" style="display: none; padding: 24px; margin-bottom: 24px;">
                     <h3 id="form-title" style="margin-bottom: 16px;">Add New Product</h3>
                     <form id="product-form-element">
@@ -108,7 +108,7 @@
                 </div>
             </div>
 
-            <!-- Orders Tab -->
+            <!--Tabul de comenzi-->
             <div id="orders-tab" class="tab-content" style="display: none;">
                 <h2 style="font-size: 1.5rem; color: #111827; margin-bottom: 24px;">Orders</h2>
                 <div id="orders-list">
@@ -127,7 +127,7 @@
         let products = [];
         let orders = [];
 
-        // Check authentication on page load
+        //Verificarea autentificarii la incarcarea paginii
         async function checkAuth() {
             const isAuthenticated = await Utils.requireAuth();
             if (!isAuthenticated) return;
@@ -135,9 +135,7 @@
             loadOverview();
         }
 
-        // Switch tabs
         function switchTab(tab) {
-            // Update tab buttons
             document.querySelectorAll('.admin-tab').forEach(btn => {
                 btn.classList.remove('active');
                 if (btn.dataset.tab === tab) {
@@ -145,16 +143,13 @@
                 }
             });
 
-            // Hide all tab contents
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.style.display = 'none';
             });
 
-            // Show selected tab
             document.getElementById(`${tab}-tab`).style.display = 'block';
             currentTab = tab;
 
-            // Load tab data
             switch (tab) {
                 case 'overview':
                     loadOverview();
@@ -168,7 +163,6 @@
             }
         }
 
-        // Load overview stats
         async function loadOverview() {
             try {
                 const [productsData, ordersData] = await Promise.all([
@@ -226,7 +220,7 @@
             }
         }
 
-        // Load products
+        //Incarcarea produselor
         async function loadProducts() {
             try {
                 products = await Utils.api('/products');
@@ -237,7 +231,7 @@
             }
         }
 
-        // Display products
+        //Display la produse
         function displayProducts() {
             const grid = document.getElementById('products-grid');
             grid.innerHTML = products.map(product => `
@@ -268,7 +262,7 @@
             `).join('');
         }
 
-        // Show product form
+        //Arata formularul de produse
         function showProductForm(product = null) {
             const form = document.getElementById('product-form');
             const title = document.getElementById('form-title');
@@ -291,13 +285,13 @@
             form.style.display = 'block';
         }
 
-        // Hide product form
+        //Ascunde formularul de produse
         function hideProductForm() {
             document.getElementById('product-form').style.display = 'none';
             editingProductId = null;
         }
 
-        // Save product
+        //Salvarea produselor
         async function saveProduct(event) {
             event.preventDefault();
             
@@ -338,7 +332,7 @@
             }
         }
 
-        // Edit product
+        //Editarea produselor
         function editProduct(productId) {
             const product = products.find(p => p._id === productId);
             if (product) {
@@ -346,7 +340,7 @@
             }
         }
 
-        // Delete product
+        //Stergerea produselor
         async function deleteProduct(productId) {
             if (!confirm('Are you sure you want to delete this product?')) return;
 
@@ -359,7 +353,7 @@
             }
         }
 
-        // Load orders
+        //Incarcarea comenzilor
         async function loadOrders() {
             try {
                 orders = await Utils.api('/orders');
@@ -370,7 +364,7 @@
             }
         }
 
-        // Display orders
+        //Aratarea produselor
         function displayOrders() {
             const container = document.getElementById('orders-list');
             
@@ -414,7 +408,7 @@
             `).join('');
         }
 
-        // Update order status
+        //Update la statusul comenzii
         async function updateOrderStatus(orderId, status) {
             try {
                 await Utils.api(`/orders/${orderId}/status`, {
@@ -428,7 +422,7 @@
             }
         }
 
-        // Logout
+        //Logout
         async function logout() {
             try {
                 await Utils.api('/logout', { method: 'POST' });
@@ -438,11 +432,11 @@
             }
         }
 
-        // Initialize page
+        //Initializarea paginii
         document.addEventListener('DOMContentLoaded', () => {
             checkAuth();
 
-            // Event listeners
+            //Event listeners
             document.getElementById('add-product-btn').addEventListener('click', () => showProductForm());
             document.getElementById('cancel-form').addEventListener('click', hideProductForm);
             document.getElementById('product-form-element').addEventListener('submit', saveProduct);

@@ -36,7 +36,7 @@
         <div class="container" style="padding: 48px 20px;">
             <h1 style="font-size: 2.5rem; margin-bottom: 32px; color: #111827;">Shopping Cart</h1>
 
-            <!-- Empty Cart State -->
+            <!--Statusul cosului gol-->
             <div id="empty-cart" style="display: none; text-align: center; padding: 48px;">
                 <div style="font-size: 64px; margin-bottom: 16px;">🛒</div>
                 <h2 style="font-size: 1.5rem; margin-bottom: 8px; color: #111827;">Your cart is empty</h2>
@@ -44,11 +44,11 @@
                 <a href="/products" class="btn btn-primary">Shop Now</a>
             </div>
 
-            <!-- Cart Items -->
+            <!--Produsele din cos-->
             <div id="cart-content" style="display: none;">
                 <div id="cart-items"></div>
 
-                <!-- Cart Total -->
+                <!--Cosul total-->
                 <div class="cart-total">
                     <div class="total-row">
                         <span class="total-label">Total:</span>
@@ -105,7 +105,7 @@
                 </div>
             </div>
 
-            <!-- Order Success -->
+            <!--Comanda plasata cu succes-->
             <div id="order-success" style="display: none;">
                 <div class="card" style="padding: 48px; text-align: center; margin-top: 32px;">
                     <div style="width: 64px; height: 64px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: white; font-size: 24px;">
@@ -164,9 +164,9 @@
 
     <script src="/js/utils.js"></script>
     <script>
-        let currentView = 'cart'; // 'cart', 'checkout', 'success'
+        let currentView = 'cart';
 
-        // Display cart items
+        //Arata produsele din cos
         function displayCart() {
             const cart = Utils.getCart();
             const emptyCart = document.getElementById('empty-cart');
@@ -208,19 +208,18 @@
             `).join('');
         }
 
-        // Update quantity
+        //Schimba cantitatea
         function updateQuantity(productId, newQuantity) {
             Utils.updateCartQuantity(productId, newQuantity);
             displayCart();
         }
 
-        // Remove item
+        //Sterge produse
         function removeItem(productId) {
             Utils.removeFromCart(productId);
             displayCart();
         }
 
-        // Show checkout form
         function showCheckout() {
             const cart = Utils.getCart();
             if (cart.length === 0) return;
@@ -233,7 +232,7 @@
             currentView = 'checkout';
         }
 
-        // Show cart
+        //Arata cosul
         function showCart() {
             document.getElementById('checkout-form').style.display = 'none';
             document.getElementById('order-success').style.display = 'none';
@@ -241,7 +240,7 @@
             currentView = 'cart';
         }
 
-        // Place order
+        //Plaseaza comanda
         async function placeOrder(event) {
             event.preventDefault();
             
@@ -290,7 +289,7 @@
             }
         }
 
-        // Show order success
+        //Arata comanda plasata cu succes
         function showOrderSuccess() {
             document.getElementById('checkout-form').style.display = 'none';
             document.getElementById('order-success').style.display = 'block';

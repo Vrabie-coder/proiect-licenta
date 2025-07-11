@@ -40,7 +40,7 @@
             </div>
 
             <div class="grid grid-cols-2" style="gap: 48px;">
-                <!-- Contact Information -->
+                <!-- Informatii de contact-->
                 <div>
                     <h2 style="font-size: 1.5rem; margin-bottom: 24px; color: #111827;">Contact Information</h2>
                     
@@ -95,7 +95,7 @@
                     </div>
                 </div>
 
-                <!-- Contact Form -->
+                <!--Formularul de contact-->
                 <div>
                     <h2 style="font-size: 1.5rem; margin-bottom: 24px; color: #111827;">Send us a Message</h2>
                     
@@ -179,7 +179,6 @@
 
     <script src="/js/utils.js"></script>
     <script>
-        // Handle contact form submission
         async function handleContactForm(event) {
             event.preventDefault();
             
@@ -201,11 +200,10 @@
                     body: formData
                 });
 
-                // Show success message
+                //Arata mesajul de succes
                 document.getElementById('contact-form').style.display = 'none';
                 document.getElementById('contact-success').style.display = 'block';
 
-                // Reset form after delay
                 setTimeout(() => {
                     document.getElementById('contact-form').style.display = 'block';
                     document.getElementById('contact-success').style.display = 'none';
@@ -218,7 +216,7 @@
             }
         }
 
-        // Initialize page
+        //Initializarea paginii
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('contact-form').addEventListener('submit', handleContactForm);
         });
